@@ -23,6 +23,7 @@ source "$SCRIPT_DIR/scripts/install-clis.sh"
 source "$SCRIPT_DIR/scripts/setup-vercel.sh"
 source "$SCRIPT_DIR/scripts/setup-convex.sh"
 source "$SCRIPT_DIR/scripts/setup-axiom.sh"
+source "$SCRIPT_DIR/scripts/setup-clerk.sh"
 source "$SCRIPT_DIR/scripts/setup-shadcn.sh"
 source "$SCRIPT_DIR/scripts/setup-ai.sh"
 source "$SCRIPT_DIR/scripts/setup-admin.sh"
@@ -244,6 +245,12 @@ fi
 if $USE_AXIOM; then
     echo -e "${CYAN}🔸 Setting up Axiom...${NC}"
     setup_axiom "$PROJECT_NAME"
+    echo ""
+fi
+
+if $USE_CLERK; then
+    echo -e "${CYAN}🔐 Setting up Clerk (Automated)...${NC}"
+    setup_clerk "$USE_CONVEX" "$USE_VERCEL" "$PROJECT_NAME"
     echo ""
 fi
 

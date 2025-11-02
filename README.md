@@ -2,7 +2,7 @@
 
 **Transform your idea into a production-ready project**
 
-Interactive project template generator with feature toggles. Pick your services, customize your stack, and get a fully configured Next.js project ready to launch. Automates setup where CLIs exist (Vercel, Convex, Axiom), provides guided config for the rest (Clerk, Linear).
+Interactive project template generator with feature toggles. Pick your services, customize your stack, and get a fully configured Next.js project ready to launch. **Fully automates** Vercel, Convex, Clerk (via Svix API), and Axiom setup. Provides guided config for Linear (GraphQL API).
 
 ---
 
@@ -13,7 +13,7 @@ Interactive project template generator with feature toggles. Pick your services,
 - **🔧 Service Integration**: Pick exactly what you need
   - ✅ **Vercel** - Deployment (auto-configured with dev/prod environments)
   - ✅ **Convex** - Serverless backend/database (auto-configured with dev/prod deployments)
-  - 📋 **Clerk** - Authentication (guided setup with detailed instructions)
+  - ✅ **Clerk** - Authentication (fully automated via Svix API + webhook setup)
   - ✅ **Axiom** - Observability (auto-configured with CLI)
   - 📋 **Linear** - Issue/project tracking (guided GraphQL setup)
 - **🎨 UI & Features**: Optional enhancements
