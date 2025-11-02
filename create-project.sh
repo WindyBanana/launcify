@@ -42,6 +42,35 @@ echo "║                                                       ║"
 echo "╚═══════════════════════════════════════════════════════╝"
 echo -e "${NC}\n"
 
+# Safety Check: Prevent running inside launchify directory
+if [ -f "$SCRIPT_DIR/create-project.sh" ] && [ -d "$SCRIPT_DIR/scripts" ] && [ -d "$SCRIPT_DIR/templates" ]; then
+    CURRENT_DIR=$(basename "$PWD")
+    if [ "$PWD" = "$SCRIPT_DIR" ]; then
+        echo -e "${RED}╔════════════════════════════════════════════════════╗${NC}"
+        echo -e "${RED}║  ⚠️  SAFETY WARNING: Wrong Directory!              ║${NC}"
+        echo -e "${RED}╚════════════════════════════════════════════════════╝${NC}"
+        echo ""
+        echo -e "${YELLOW}You are running the generator inside the launchify directory itself!${NC}"
+        echo -e "${YELLOW}This will create your project as a subdirectory of the generator.${NC}"
+        echo ""
+        echo -e "${CYAN}Recommended:${NC}"
+        echo -e "  1. ${CYAN}cd ..${NC} (go up one directory)"
+        echo -e "  2. ${CYAN}./launchify/create-project.sh${NC} (run from parent directory)"
+        echo ""
+        echo -e "${YELLOW}This way your project will be created alongside launchify, not inside it.${NC}"
+        echo ""
+        read -p "Continue anyway? [y/N]: " CONTINUE_ANYWAY
+        CONTINUE_ANYWAY=${CONTINUE_ANYWAY:-N}
+
+        if [[ ! $CONTINUE_ANYWAY =~ ^[Yy]$ ]]; then
+            echo -e "${GREEN}Good choice! Run from the parent directory instead.${NC}"
+            exit 0
+        fi
+
+        echo -e "${YELLOW}⚠️  Proceeding anyway (not recommended)${NC}\n"
+    fi
+fi
+
 # Platform Detection
 setup_platform_tools
 echo ""
@@ -261,14 +290,28 @@ if $USE_CONVEX; then
 fi
 
 if $USE_AXIOM; then
-    echo -e "${CYAN}🔸 Setting up Axiom...${NC}"
+    echo -e "${CYAN}🔸 Setting up Axiom Observability...${NC}"
+    echo -e "${BLUE}ℹ️  After setup, you'll need to run: ${GREEN}axiom auth login${NC}"
+    echo -e "${BLUE}   and create an API token${NC}"
+    echo ""
     setup_axiom "$PROJECT_NAME"
     echo ""
 fi
 
 if $USE_CLERK; then
-    echo -e "${CYAN}🔐 Setting up Clerk (Automated)...${NC}"
-    setup_clerk "$USE_CONVEX" "$USE_VERCEL" "$PROJECT_NAME"
+    echo -e "${CYAN}🔐 Setting up Clerk Authentication...${NC}"
+    echo -e "${BLUE}ℹ️  This will set up webhooks and configure Clerk automatically${NC}"
+    echo -e "${BLUE}   You'll need your Clerk API keys from: ${CYAN}https://dashboard.clerk.com${NC}"
+    echo ""
+
+    if setup_clerk "$USE_CONVEX" "$USE_VERCEL" "$PROJECT_NAME"; then
+        CLERK_AUTOMATED=true
+        echo -e "${GREEN}✓ Clerk automated setup completed${NC}"
+    else
+        CLERK_AUTOMATED=false
+        echo -e "${YELLOW}⚠️  Clerk needs manual configuration${NC}"
+        echo -e "${BLUE}   See the manual setup summary at the end${NC}"
+    fi
     echo ""
 fi
 
@@ -281,6 +324,16 @@ fi
 
 if $USE_AI; then
     echo -e "${CYAN}🤖 Setting up AI Integration...${NC}"
+    if [ "$AI_PROVIDER" = "openai" ]; then
+        echo -e "${BLUE}ℹ️  Get your API key from: ${CYAN}https://platform.openai.com/api-keys${NC}"
+    elif [ "$AI_PROVIDER" = "anthropic" ]; then
+        echo -e "${BLUE}ℹ️  Get your API key from: ${CYAN}https://console.anthropic.com/settings/keys${NC}"
+    elif [ "$AI_PROVIDER" = "both" ]; then
+        echo -e "${BLUE}ℹ️  You'll need API keys from both:"
+        echo -e "${BLUE}   OpenAI: ${CYAN}https://platform.openai.com/api-keys${NC}"
+        echo -e "${BLUE}   Anthropic: ${CYAN}https://console.anthropic.com/settings/keys${NC}"
+    fi
+    echo ""
     setup_ai "$PACKAGE_MANAGER" "$AI_PROVIDER"
     echo ""
 fi
@@ -416,37 +469,20 @@ echo -e "${GREEN}╚════════════════════
 
 echo -e "${CYAN}📂 Project created at: ${GREEN}./$PROJECT_NAME${NC}\n"
 
+# Show detailed manual setup summary
+CLERK_AUTOMATED=${CLERK_AUTOMATED:-false}
+show_manual_setup_summary "$USE_CLERK" "$USE_AXIOM" "$USE_LINEAR" "$USE_AI" "$AI_PROVIDER" "$CLERK_AUTOMATED"
+
 echo -e "${YELLOW}Next steps:${NC}"
 echo -e "  1. ${CYAN}cd $PROJECT_NAME${NC}"
-
-STEP_NUM=2
-
-if $USE_CLERK; then
-    echo -e "  $STEP_NUM. ${CYAN}Read SETUP_GUIDE.md and configure Clerk${NC}"
-    ((STEP_NUM++))
-fi
-
-if $USE_LINEAR; then
-    echo -e "  $STEP_NUM. ${CYAN}Read SETUP_GUIDE.md and configure Linear${NC}"
-    ((STEP_NUM++))
-fi
-
-if $USE_AI; then
-    echo -e "  $STEP_NUM. ${CYAN}Add your AI API keys to .env.local${NC}"
-    ((STEP_NUM++))
-fi
-
-echo -e "  $STEP_NUM. ${CYAN}Review .env.local and add any missing API keys${NC}"
-((STEP_NUM++))
-
-echo -e "  $STEP_NUM. ${CYAN}$PACKAGE_MANAGER run dev${NC} - Start development server"
-((STEP_NUM++))
+echo -e "  2. ${CYAN}Review the manual setup instructions above${NC}"
+echo -e "  3. ${CYAN}Update .env.local with required API keys${NC}"
+echo -e "  4. ${CYAN}$PACKAGE_MANAGER run dev${NC} - Start development server"
 
 # Only show git push instructions if user didn't already push
 if [[ ! $SETUP_GITHUB =~ ^[Yy]$ ]]; then
-    echo -e "  $STEP_NUM. ${CYAN}git remote add origin <your-repo-url>${NC}"
-    ((STEP_NUM++))
-    echo -e "  $STEP_NUM. ${CYAN}git push -u origin main${NC}"
+    echo -e "  5. ${CYAN}git remote add origin <your-repo-url>${NC}"
+    echo -e "  6. ${CYAN}git push -u origin main${NC}"
 fi
 
 echo ""

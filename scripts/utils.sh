@@ -540,3 +540,129 @@ EOF
 
     echo -e "${GREEN}✓ SETUP_GUIDE.md created${NC}"
 }
+
+# Show manual setup summary
+show_manual_setup_summary() {
+    local use_clerk=$1
+    local use_axiom=$2
+    local use_linear=$3
+    local use_ai=$4
+    local ai_provider=$5
+    local clerk_automated=$6
+
+    local needs_manual=false
+
+    echo -e "${YELLOW}╔════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${YELLOW}║         📋 MANUAL SETUP REQUIRED                           ║${NC}"
+    echo -e "${YELLOW}╚════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+
+    # Check if Clerk was automated
+    if $use_clerk && ! $clerk_automated; then
+        needs_manual=true
+        echo -e "${CYAN}🔐 Clerk Authentication${NC}"
+        echo -e "   ${YELLOW}Action needed:${NC} Add API keys to .env.local"
+        echo ""
+        echo -e "   1. Go to ${CYAN}https://dashboard.clerk.com${NC}"
+        echo -e "   2. Create a new application (Development)"
+        echo -e "   3. Copy your keys from Dashboard → API Keys"
+        echo -e "   4. Update .env.local with:"
+        echo -e "      ${GREEN}NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY${NC}=pk_test_..."
+        echo -e "      ${GREEN}CLERK_SECRET_KEY${NC}=sk_test_..."
+        echo ""
+        echo -e "   ${BLUE}ℹ️  See SETUP_GUIDE.md for detailed instructions${NC}"
+        echo ""
+    fi
+
+    if $use_axiom; then
+        needs_manual=true
+        echo -e "${CYAN}🔸 Axiom Observability${NC}"
+        echo -e "   ${YELLOW}Action needed:${NC} Complete dataset and token setup"
+        echo ""
+        echo -e "   Run these commands:"
+        echo -e "   ${GREEN}axiom auth login${NC}                    # Login to Axiom"
+        echo -e "   ${GREEN}axiom dataset create <name>-dev${NC}    # Create dev dataset"
+        echo -e "   ${GREEN}axiom token create${NC}                 # Create API token"
+        echo ""
+        echo -e "   Then update .env.local with:"
+        echo -e "      ${GREEN}AXIOM_DATASET${NC}=your-dataset-name"
+        echo -e "      ${GREEN}AXIOM_TOKEN${NC}=xaat_..."
+        echo -e "      ${GREEN}AXIOM_ORG_ID${NC}=your-org-id"
+        echo ""
+    fi
+
+    if $use_linear; then
+        needs_manual=true
+        echo -e "${CYAN}📋 Linear Issue Tracking${NC}"
+        echo -e "   ${YELLOW}Action needed:${NC} Get API key"
+        echo ""
+        echo -e "   1. Go to ${CYAN}https://linear.app/settings/api${NC}"
+        echo -e "   2. Click 'Create new key'"
+        echo -e "   3. Copy the API key"
+        echo -e "   4. Update .env.local with:"
+        echo -e "      ${GREEN}LINEAR_API_KEY${NC}=lin_api_..."
+        echo -e "      ${GREEN}LINEAR_TEAM_ID${NC}=your-team-id"
+        echo ""
+        echo -e "   ${BLUE}ℹ️  See SETUP_GUIDE.md for GraphQL examples${NC}"
+        echo ""
+    fi
+
+    if $use_ai; then
+        needs_manual=true
+        if [ "$ai_provider" = "openai" ] || [ "$ai_provider" = "both" ]; then
+            echo -e "${CYAN}🤖 OpenAI API${NC}"
+            echo -e "   ${YELLOW}Action needed:${NC} Get API key"
+            echo ""
+            echo -e "   1. Go to ${CYAN}https://platform.openai.com/api-keys${NC}"
+            echo -e "   2. Click '+ Create new secret key'"
+            echo -e "   3. Copy the key (starts with sk-proj-...)"
+            echo -e "   4. Update .env.local with:"
+            echo -e "      ${GREEN}OPENAI_API_KEY${NC}=sk-proj-..."
+            echo ""
+        fi
+
+        if [ "$ai_provider" = "anthropic" ] || [ "$ai_provider" = "both" ]; then
+            echo -e "${CYAN}🤖 Anthropic API (Claude)${NC}"
+            echo -e "   ${YELLOW}Action needed:${NC} Get API key"
+            echo ""
+            echo -e "   1. Go to ${CYAN}https://console.anthropic.com/settings/keys${NC}"
+            echo -e "   2. Click 'Create Key'"
+            echo -e "   3. Copy the key (starts with sk-ant-...)"
+            echo -e "   4. Update .env.local with:"
+            echo -e "      ${GREEN}ANTHROPIC_API_KEY${NC}=sk-ant-..."
+            echo ""
+        fi
+    fi
+
+    if ! $needs_manual; then
+        echo -e "${GREEN}✅ All services configured automatically!${NC}"
+        echo -e ""
+        echo -e "You can start development immediately:"
+        echo -e "  ${CYAN}npm run dev${NC}"
+        echo ""
+    else
+        echo -e "${YELLOW}╔════════════════════════════════════════════════════════════╗${NC}"
+        echo -e "${YELLOW}║  ⚠️  Complete the steps above before running your app     ║${NC}"
+        echo -e "${YELLOW}╚════════════════════════════════════════════════════════════╝${NC}"
+        echo ""
+        echo -e "${CYAN}Quick checklist:${NC}"
+        echo -e "  1. ${CYAN}Open .env.local in your editor${NC}"
+        echo -e "  2. ${CYAN}Find lines with 'TODO'${NC}"
+        echo -e "  3. ${CYAN}Follow the links above to get your API keys${NC}"
+        echo -e "  4. ${CYAN}Replace TODO values with real keys${NC}"
+        echo -e "  5. ${CYAN}Save the file${NC}"
+        echo -e "  6. ${CYAN}Run: npm run dev${NC}"
+        echo ""
+    fi
+
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${BLUE}📚 Documentation:${NC}"
+    echo -e "  • ${CYAN}.env.local${NC} - All environment variables with inline comments"
+    echo -e "  • ${CYAN}SETUP_GUIDE.md${NC} - Step-by-step setup instructions"
+    echo -e "  • ${CYAN}README.md${NC} - Project overview and usage"
+    if [ -f "VERCEL_ENVIRONMENT_SETUP.md" ]; then
+        echo -e "  • ${CYAN}VERCEL_ENVIRONMENT_SETUP.md${NC} - Production deployment guide"
+    fi
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+}
