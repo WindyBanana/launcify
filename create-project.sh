@@ -111,7 +111,7 @@ USE_CLERK=${USE_CLERK:-Y}
 read -p "  Axiom (Observability) [y/N]: " USE_AXIOM
 USE_AXIOM=${USE_AXIOM:-N}
 
-read -p "  Linear (Project Management) [y/N]: " USE_LINEAR
+read -p "  Linear (Issue/Project Tracking) [y/N]: " USE_LINEAR
 USE_LINEAR=${USE_LINEAR:-N}
 
 echo ""
@@ -278,12 +278,102 @@ if $USE_CLERK || $USE_LINEAR; then
     echo ""
 fi
 
-# Step 13: Initialize Git
-echo -e "${CYAN}🔧 Step 13: Initializing Git Repository${NC}"
+# Step 13: Validate Build
+echo -e "${CYAN}🔨 Step 13: Validating Project Build${NC}"
+echo -e "${BLUE}Running type check...${NC}"
+if [ "$PACKAGE_MANAGER" = "pnpm" ]; then
+    pnpm tsc --noEmit
+elif [ "$PACKAGE_MANAGER" = "yarn" ]; then
+    yarn tsc --noEmit
+else
+    npm run tsc --noEmit 2>/dev/null || npx tsc --noEmit
+fi
+
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✓ Type check passed${NC}"
+else
+    echo -e "${YELLOW}⚠️  Type check had warnings (non-critical)${NC}"
+fi
+
+echo -e "${BLUE}Running lint...${NC}"
+if [ "$PACKAGE_MANAGER" = "pnpm" ]; then
+    pnpm lint
+elif [ "$PACKAGE_MANAGER" = "yarn" ]; then
+    yarn lint
+else
+    npm run lint
+fi
+
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✓ Lint passed${NC}"
+else
+    echo -e "${YELLOW}⚠️  Lint had warnings${NC}"
+fi
+
+echo -e "${BLUE}Running production build...${NC}"
+if [ "$PACKAGE_MANAGER" = "pnpm" ]; then
+    pnpm build
+elif [ "$PACKAGE_MANAGER" = "yarn" ]; then
+    yarn build
+else
+    npm run build
+fi
+
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✓ Production build successful${NC}"
+    echo -e "${GREEN}✓ Project is ready for Vercel deployment${NC}\n"
+else
+    echo -e "${RED}✗ Build failed${NC}"
+    echo -e "${YELLOW}⚠️  Please fix build errors before deploying${NC}\n"
+fi
+
+# Step 14: Initialize Git
+echo -e "${CYAN}🔧 Step 14: Initializing Git Repository${NC}"
 git init
 git add .
-git commit -m "Initial commit: $PROJECT_NAME - Fullstack template with automated setup"
+git commit -m "Initial commit: $PROJECT_NAME - Launchify template with automated setup"
 echo -e "${GREEN}✓ Git repository initialized${NC}\n"
+
+# Step 15: Optional GitHub Setup
+echo -e "${CYAN}📦 Step 15: GitHub Repository Setup${NC}"
+echo -e "Do you want to push this project to GitHub now?"
+read -p "Add GitHub remote and push? [y/N]: " SETUP_GITHUB
+SETUP_GITHUB=${SETUP_GITHUB:-N}
+
+if [[ $SETUP_GITHUB =~ ^[Yy]$ ]]; then
+    echo ""
+    echo -e "${BLUE}GitHub Repository Setup${NC}"
+    echo -e "${YELLOW}Please create a repository on GitHub first if you haven't already:${NC}"
+    echo -e "  ${CYAN}https://github.com/new${NC}"
+    echo ""
+
+    read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): " REPO_URL
+
+    if [ -n "$REPO_URL" ]; then
+        echo -e "${BLUE}Adding remote...${NC}"
+        git remote add origin "$REPO_URL"
+
+        echo -e "${BLUE}Renaming branch to main...${NC}"
+        git branch -M main
+
+        echo -e "${BLUE}Pushing to GitHub...${NC}"
+        if git push -u origin main; then
+            echo -e "${GREEN}✓ Successfully pushed to GitHub!${NC}"
+            echo -e "${GREEN}✓ Repository: $REPO_URL${NC}\n"
+        else
+            echo -e "${YELLOW}⚠️  Push failed. You may need to authenticate or check your repository URL.${NC}"
+            echo -e "${CYAN}You can push manually later with:${NC}"
+            echo -e "  ${CYAN}git push -u origin main${NC}\n"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  No repository URL provided. Skipping push.${NC}\n"
+    fi
+else
+    echo -e "${BLUE}ℹ️  Skipping GitHub setup. You can push later with:${NC}"
+    echo -e "  ${CYAN}git remote add origin <your-repo-url>${NC}"
+    echo -e "  ${CYAN}git branch -M main${NC}"
+    echo -e "  ${CYAN}git push -u origin main${NC}\n"
+fi
 
 # Final Summary
 echo -e "${GREEN}╔═══════════════════════════════════════════════════════╗${NC}"
@@ -297,17 +387,35 @@ echo -e "${CYAN}📂 Project created at: ${GREEN}./$PROJECT_NAME${NC}\n"
 echo -e "${YELLOW}Next steps:${NC}"
 echo -e "  1. ${CYAN}cd $PROJECT_NAME${NC}"
 
+STEP_NUM=2
+
 if $USE_CLERK; then
-    echo -e "  2. ${CYAN}Read SETUP_GUIDE.md and configure Clerk${NC}"
+    echo -e "  $STEP_NUM. ${CYAN}Read SETUP_GUIDE.md and configure Clerk${NC}"
+    ((STEP_NUM++))
 fi
 
 if $USE_LINEAR; then
-    echo -e "  3. ${CYAN}Read SETUP_GUIDE.md and configure Linear${NC}"
+    echo -e "  $STEP_NUM. ${CYAN}Read SETUP_GUIDE.md and configure Linear${NC}"
+    ((STEP_NUM++))
 fi
 
-echo -e "  4. ${CYAN}Review .env.local and add any missing API keys${NC}"
-echo -e "  5. ${CYAN}$PACKAGE_MANAGER run dev${NC} - Start development server"
-echo -e "  6. ${CYAN}git remote add origin <your-repo-url>${NC}"
-echo -e "  7. ${CYAN}git push -u origin main${NC}\n"
+if $USE_AI; then
+    echo -e "  $STEP_NUM. ${CYAN}Add your AI API keys to .env.local${NC}"
+    ((STEP_NUM++))
+fi
 
+echo -e "  $STEP_NUM. ${CYAN}Review .env.local and add any missing API keys${NC}"
+((STEP_NUM++))
+
+echo -e "  $STEP_NUM. ${CYAN}$PACKAGE_MANAGER run dev${NC} - Start development server"
+((STEP_NUM++))
+
+# Only show git push instructions if user didn't already push
+if [[ ! $SETUP_GITHUB =~ ^[Yy]$ ]]; then
+    echo -e "  $STEP_NUM. ${CYAN}git remote add origin <your-repo-url>${NC}"
+    ((STEP_NUM++))
+    echo -e "  $STEP_NUM. ${CYAN}git push -u origin main${NC}"
+fi
+
+echo ""
 echo -e "${GREEN}✨ Happy coding!${NC}\n"

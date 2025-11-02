@@ -131,7 +131,7 @@ EOF
     if $use_linear; then
         cat >> .env.local << EOF
 # --------------------------------------------
-# Linear (Project Management)
+# Linear (Issue/Project Tracking)
 # --------------------------------------------
 # Get API key from: https://linear.app/settings/api
 # See SETUP_GUIDE.md for GraphQL setup instructions
@@ -345,9 +345,9 @@ EOF
 
     if $use_linear; then
         cat >> SETUP_GUIDE.md << EOF
-## 📊 Linear (Project Management)
+## 📊 Linear (Issue/Project Tracking)
 
-Linear uses GraphQL API. Here's how to set it up:
+Linear is an issue tracking and project management tool (like Jira). Here's how to integrate it via GraphQL API:
 
 ### Get API Access
 

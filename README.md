@@ -15,7 +15,7 @@ Interactive project template generator with feature toggles. Pick your services,
   - ✅ **Convex** - Serverless backend/database (auto-configured with dev/prod deployments)
   - 📋 **Clerk** - Authentication (guided setup with detailed instructions)
   - ✅ **Axiom** - Observability (auto-configured with CLI)
-  - 📋 **Linear** - Project management (guided GraphQL setup)
+  - 📋 **Linear** - Issue/project tracking (guided GraphQL setup)
 - **🎨 UI & Features**: Optional enhancements
   - ✅ **shadcn/ui** - Beautiful component library with dark mode support
   - ✅ **AI Integration** - OpenAI and/or Anthropic with ready-to-use utilities
@@ -28,15 +28,27 @@ Interactive project template generator with feature toggles. Pick your services,
 
 ---
 
-## 📋 Prerequisites
+## 📋 Prerequisites & Platform Support
 
-The script will check for these and help you install missing dependencies:
+**🐧 Platform Compatibility:**
+- ✅ **Linux** - Fully supported (tested on Ubuntu/Debian)
+- ⚠️ **WSL (Windows Subsystem for Linux)** - Should work, but not fully tested
+  - Browser OAuth flows may need manual intervention
+  - Use WSL 2 for best compatibility
+- ⚠️ **macOS** - Partially supported
+  - Axiom CLI requires Homebrew (`brew install axiomhq/tap/axiom`)
+  - Other CLIs should work
+  - Some Linux-specific commands may need adjustments
+- ❌ **Windows (native)** - Not supported
+  - Use WSL instead
 
+**Required:**
 - **Node.js 18+** (required)
 - **Git** (required)
 - **npm/pnpm/yarn** (at least one)
+- **Bash shell** (default on Linux/macOS/WSL)
 
-Service CLIs will be installed automatically if you select those services.
+The script will check for these and help you install missing dependencies. Service CLIs will be installed automatically if you select those services.
 
 ---
 
@@ -239,10 +251,11 @@ my-saas-app/
   - Production: Main branch deployments
 
 #### Convex
-- ✅ Auto-installation of `convex` package
-- ✅ Development deployment initialization
+- ✅ Auto-installation of `convex` package (local, not global)
+- ✅ Development deployment initialization (via `npx convex`)
 - ✅ Schema and example files
 - ✅ Auto-populated `.env.local`
+- 💡 **Note**: No global CLI installation needed - uses `npx convex` commands
 - 🌍 **Environments**:
   - Development: Auto-created dev deployment
   - Production: Manual deployment (`npx convex deploy --prod`)
