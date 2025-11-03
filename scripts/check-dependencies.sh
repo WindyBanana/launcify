@@ -26,15 +26,51 @@ check_dependencies() {
     # Check package manager
     if [ "$package_manager" = "pnpm" ]; then
         if ! command -v pnpm &> /dev/null; then
-            echo -e "${YELLOW}⚠️  pnpm not found, will install it${NC}"
-            npm install -g pnpm
+            echo -e "${CYAN}pnpm Package Manager${NC}"
+            echo ""
+            echo "You selected pnpm as your package manager."
+            echo "pnpm is a fast, disk-efficient alternative to npm."
+            echo ""
+            echo -e "${YELLOW}Installation details:${NC}"
+            echo "  • Package: pnpm"
+            echo "  • Method: npm global install"
+            echo "  • Size: ~20MB"
+            echo ""
+            read -p "Install pnpm now? [y/N]: " install_pnpm
+            install_pnpm=${install_pnpm:-N}
+            
+            if [[ $install_pnpm =~ ^[Yy]$ ]]; then
+                npm install -g pnpm
+                echo -e "${GREEN}✓ pnpm installed${NC}"
+            else
+                echo -e "${RED}✗ Cannot proceed without pnpm. Please install manually or choose a different package manager.${NC}"
+                exit 1
+            fi
         else
             echo -e "${GREEN}✓ pnpm $(pnpm -v)${NC}"
         fi
     elif [ "$package_manager" = "yarn" ]; then
         if ! command -v yarn &> /dev/null; then
-            echo -e "${YELLOW}⚠️  yarn not found, will install it${NC}"
-            npm install -g yarn
+            echo -e "${CYAN}Yarn Package Manager${NC}"
+            echo ""
+            echo "You selected Yarn as your package manager."
+            echo "Yarn is a popular, fast alternative to npm."
+            echo ""
+            echo -e "${YELLOW}Installation details:${NC}"
+            echo "  • Package: yarn"
+            echo "  • Method: npm global install"
+            echo "  • Size: ~5MB"
+            echo ""
+            read -p "Install Yarn now? [y/N]: " install_yarn
+            install_yarn=${install_yarn:-N}
+            
+            if [[ $install_yarn =~ ^[Yy]$ ]]; then
+                npm install -g yarn
+                echo -e "${GREEN}✓ yarn installed${NC}"
+            else
+                echo -e "${RED}✗ Cannot proceed without yarn. Please install manually or choose a different package manager.${NC}"
+                exit 1
+            fi
         else
             echo -e "${GREEN}✓ yarn $(yarn -v)${NC}"
         fi

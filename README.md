@@ -1,12 +1,117 @@
 # Launchify
 
-**Transform your idea into a production-ready project**
+**Transform your idea into a production-ready project in minutes**
 
-Interactive project template generator with feature toggles. Pick your services, customize your stack, and get a fully configured Next.js project ready to launch. **Fully automates** Vercel, Convex, Clerk (via Svix API), and Axiom setup. Provides guided config for Linear (GraphQL API).
+Automated Next.js project generator with smart resume, progress tracking, and configuration presets. Never lose progress, choose from pre-built templates, and get a fully configured production-ready app.
+
+---
+
+## 🚀 Quick Start
+
+### 1. Clone and Run
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/launchify.git
+cd launchify
+
+# Run from parent directory (recommended)
+cd ..
+./launchify/create-project.sh
+```
+
+### 2. Choose Your Path
+- **Fast Track**: Pick a preset (SaaS Starter, Blog, AI App, or Minimal)
+- **Custom**: Select exactly what you need from the interactive menu
+
+### 3. Done!
+Your production-ready Next.js app is created with:
+- ✅ All services configured and connected
+- ✅ Environment variables set up
+- ✅ TypeScript, ESLint, and build verified
+- ✅ Git repository initialized
+- ✅ Ready to deploy to Vercel
+
+**Total time: 5-15 minutes** (depending on services selected)
+
+### What You Get
+
+```bash
+your-project/
+├── .env.local              # All API keys configured
+├── app/                    # Next.js 15 App Router
+├── components/             # shadcn/ui components (optional)
+├── convex/                 # Backend functions (optional)
+├── lib/                    # Utilities & helpers
+├── SETUP_GUIDE.md          # Step-by-step instructions
+└── README.md               # Project documentation
+```
+
+### Try it in Dry Run Mode
+```bash
+./launchify/create-project.sh --dry-run
+```
+Preview exactly what will happen without making any changes.
+
+---
+
+## What's New in v2.0
+
+**Major improvements:**
+- **Checkpoint/Resume** - Never lose progress, resume from any failure point
+- **Progress Tracking** - Visual progress bar with estimated time remaining
+- **Configuration Presets** - Quick-start templates (SaaS, Blog, AI App, Minimal)
+- **Config Export/Import** - Save and reuse successful configurations
+- **Full Logging** - All output saved to `~/.launchify/logs/` for debugging
+- ✅ **Health Checks** - Automated verification after setup completes
+
+---
+
+## Table of Contents
+- [🚀 Quick Start](#-quick-start) - Get running in 5 minutes
+- [What's New](#whats-new-in-v20) - v2.0 improvements
+- [Features](#features) - What you get
+- [Prerequisites](#prerequisites--platform-support) - System requirements
+- [Configuration Presets](#configuration-presets) - Quick-start templates
+- [Usage Examples](#usage-examples) - See it in action
+- [Troubleshooting](#troubleshooting) - Resume, logs, and fixes
+- [Contributing](#contributing) - Help improve Launchify
 
 ---
 
 ## Features
+
+### Reliability & Recovery
+- **Checkpoint/Resume System**: If setup fails, resume from where you left off - no need to start over
+  - Progress automatically saved at each of 14 steps
+  - Just run `./create-project.sh` again to continue
+  - Works even if you press Ctrl+C or terminal crashes
+  - Clear resume prompt shows exactly where you left off
+- **Comprehensive Logging**: All output saved to `~/.launchify/logs/project-name-timestamp.log`
+  - Automatic log cleanup (keeps last 10)
+  - Full command output captured for debugging
+- **Progress Tracking**: Visual progress bar showing current step and estimated time remaining
+  - Real-time ETA calculation based on actual step durations
+  - Shows "Progress automatically saved (Ctrl+C safe)" at every step
+- **Error Recovery**: Smart error handling with retry, skip, or manual completion options
+  - 4 clear options when something fails: Retry, Skip, Manual Fix, or Abort
+  - Detailed instructions shown for each service error
+  - Log file location provided for troubleshooting
+- **State Persistence**: Configuration saved automatically for resume
+  - No manual save required - happens automatically
+  - State file location: `.launchify-state/`
+
+### User Experience
+- **Configuration Presets**: 
+  - **SaaS Starter**: Full-stack app with all services
+  - **Blog/Content**: Lightweight content-focused site
+  - **AI Application**: AI-powered app with OpenAI/Anthropic
+  - **Minimal**: Just the basics
+  - **Custom**: Choose features individually
+- **Config Export/Import**: Save successful configurations for future projects
+- **Post-Setup Health Check**: Automated verification that everything works
+- **Dry Run Mode**: Preview what will happen with `--dry-run`
+
+### Service Integration
 
 - **Interactive TUI Dashboard**: Beautiful checkbox/radio button interface (whiptail/dialog)
   - Visual feature selection with real-time summary
@@ -62,26 +167,6 @@ The script will check for these and help you install missing dependencies. Servi
 
 ---
 
-## Quick Start
-
-```bash
-# 1. Clone this repository
-git clone <this-repo-url>
-cd launchify
-
-# 2. Make the script executable
-chmod +x create-project.sh
-
-# 3. Run the generator
-./create-project.sh
-
-# 4. Follow the interactive prompts
-```
-
----
-
-## Usage
-
 ### Interactive TUI Dashboard (Recommended)
 
 On Linux and macOS, Launchify provides a beautiful Terminal UI (TUI) dashboard:
@@ -112,75 +197,61 @@ When you run `./create-project.sh`, you'll be guided through:
    - Clerk webhooks configured via Svix API
    - All environment variables populated
 
-### Example Session
+### Using Configuration Presets
 
 ```bash
 $ ./create-project.sh
 
-╔═══════════════════════════════════════════════════════╗
-║                                                       ║
-║     FULLSTACK PROJECT TEMPLATE GENERATOR             ║
-║     Zero-config setup for production-ready apps      ║
-║                                                       ║
-╚═══════════════════════════════════════════════════════╝
+WELCOME TO LAUNCHIFY
 
-Step 1: Project Configuration
-Enter project name: my-saas-app
-✓ Project name: my-saas-app
+Quick Start with Configuration Presets
 
-Step 2: Package Manager
-Select your package manager:
-  1) npm (default)
-  2) pnpm
-  3) yarn
-Choice [1-3]: 1
-✓ Package manager: npm
+Choose a preset configuration to get started quickly,
+or select Custom to choose features individually.
 
-Step 3: Framework
-Select your framework:
-  1) Next.js 15 + TypeScript + Tailwind (recommended)
-Choice [1]: 1
-✓ Framework: nextjs
+Available Presets:
 
-Step 4: Service Selection
-Select services to integrate (y/n):
-  Vercel (Deployment) [Y/n]: y
-  Convex (Backend/Database) [Y/n]: y
-  Clerk (Authentication) [Y/n]: y
-  Axiom (Observability) [y/N]: n
-  Linear (Project Management) [y/N]: n
+1. SaaS Starter - Full-featured SaaS application
+   ✓ Vercel + Convex + Clerk + Axiom
+   ✓ shadcn/ui + Admin Panel + Feature Toggles
+   ✓ GitHub CI/CD
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. Blog/Content Site - Lightweight content-focused site
+   ✓ Vercel + shadcn/ui + GitHub
+   ✗ No backend/auth (keep it simple)
+
+3. AI Application - AI-powered app
+   ✓ Vercel + Convex + Clerk + Axiom
+   ✓ OpenAI & Anthropic integration
+   ✓ shadcn/ui + GitHub
+
+4. Minimal - Just the basics
+   ✓ Next.js + Vercel only
+   ✗ No additional services
+
+5. Custom - Choose features individually
+
+Select preset [1-5]: 1
+
+✓ Loaded preset: saas-starter
+
 Configuration Summary:
-  Project: my-saas-app
-  Package Manager: npm
   Framework: nextjs
-  Services:
-    ✓ Vercel
-    ✓ Convex
-    ✓ Clerk
-    ✗ Axiom
-    ✗ Linear
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Vercel: ✓
+  Convex: ✓
+  Clerk: ✓
+  ...
 
-Proceed with setup? [Y/n]: y
+Use this configuration? [Y/n]: y
 
-Step 5: Checking Dependencies...
-✓ Node.js v20.10.0
-✓ npm 10.2.3
-✓ Git 2.43.0
-✓ Vercel CLI 33.0.1
-✓ All critical dependencies satisfied
+═══════════════════════════════════════════════════════════
+Progress: [████████░░░░] 57%
+Step 8/14: Setting up Admin Panel
+Estimated time remaining: 3m 24s
+Progress automatically saved (Ctrl+C safe)
+═══════════════════════════════════════════════════════════
 
-Creating Project...
-✓ Next.js project created
-
-Setting up Vercel...
-✓ Logged in to Vercel
-✓ Vercel project linked
-
-Setting up Convex...
-✓ Convex development deployment initialized
+Setting up Admin Panel...
 
 Step 10: Generating Environment Files...
 ✓ .env.local created
@@ -192,11 +263,7 @@ Step 11: Creating Setup Guides...
 Step 13: Initializing Git Repository...
 ✓ Git repository initialized
 
-╔═══════════════════════════════════════════════════════╗
-║                                                       ║
-║          🚀 PROJECT SETUP COMPLETE! 🚀               ║
-║                                                       ║
-╚═══════════════════════════════════════════════════════╝
+🚀 PROJECT SETUP COMPLETE!
 
 Project created at: ./my-saas-app
 
@@ -455,27 +522,72 @@ To add new service integrations:
 
 ## Troubleshooting
 
-### "Command not found: vercel"
+### Setup Failed - Can I Resume?
 
-The Vercel CLI wasn't installed properly.
+**Yes!** The checkpoint system automatically saves your progress:
 
+```bash
+# Just run the script again
+./create-project.sh
+
+# You'll see:
+# PREVIOUS SETUP DETECTED
+# Found saved progress: my-project
+# Last completed step: 5 of 14
+# Resume from step 6? [Y/n]:
+```
+
+Progress is saved at every step. Even if you press Ctrl+C or your terminal crashes, you can resume exactly where you left off.
+
+### Where Are My Logs?
+
+All setup output is automatically saved:
+
+```bash
+# View the latest log
+ls -lt ~/.launchify/logs/
+
+# Logs are named: project-name_YYYY-MM-DD_HH-MM-SS.log
+cat ~/.launchify/logs/my-project_2025-11-03_14-23-45.log
+```
+
+Logs are kept for debugging. The system automatically keeps the last 10 logs.
+
+### How Do I Start Over?
+
+```bash
+# Delete the checkpoint state
+rm -rf .launchify-state/
+
+# Run the script again
+./create-project.sh
+```
+
+### Step Failed - What Are My Options?
+
+When a step fails, you get 4 options:
+
+1. **Retry** - Try the step again right now
+2. **Skip** - Continue without this step (may cause issues)
+3. **Manual** - Fix it yourself, then mark as complete
+4. **Abort** - Stop here, fix it later, then resume
+
+The script shows clear instructions for each option.
+
+### Common Issues
+
+#### "Command not found: vercel"
 ```bash
 npm install -g vercel
 ```
 
-### "Convex initialization failed"
-
-Make sure you're logged in:
-
+#### "Convex initialization failed"
 ```bash
 npx convex login
 npx convex dev --once --configure=new
 ```
 
-### "Axiom CLI not found"
-
-Install manually:
-
+#### "Axiom CLI not found"
 **Linux:**
 ```bash
 curl -L https://github.com/axiomhq/cli/releases/latest/download/axiom_linux_amd64 -o axiom
@@ -488,12 +600,18 @@ sudo mv axiom /usr/local/bin/
 brew install axiomhq/tap/axiom
 ```
 
-### Environment variables not working
+#### Environment variables not working
+1. Check `.env.local` exists
+2. Remove TODO placeholders
+3. Restart dev server
+4. For production, set in Vercel dashboard
 
-1. Make sure `.env.local` exists
-2. Check that values don't have TODO placeholders
-3. Restart your dev server after changing env vars
-4. For Vercel deployment, set vars in Vercel dashboard
+### Still Stuck?
+
+1. Check logs: `~/.launchify/logs/`
+2. Review the generated `SETUP_GUIDE.md` in your project
+3. See [ERROR_HANDLING_GUIDE.md](ERROR_HANDLING_GUIDE.md) for advanced recovery
+4. Open an issue with your log file
 
 ---
 

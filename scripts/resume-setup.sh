@@ -152,7 +152,7 @@ should_setup_service() {
 
     # If already configured, skip
     if $already_has; then
-        echo -e "${BLUE}⏭️  $service_name already configured, skipping${NC}"
+        echo -e "${BLUE}✓ $service_name already configured, skipping${NC}"
         return 1
     fi
 

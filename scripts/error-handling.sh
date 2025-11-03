@@ -29,6 +29,8 @@ USE_AI=$USE_AI
 AI_PROVIDER="$AI_PROVIDER"
 USE_ADMIN=$USE_ADMIN
 ADMIN_PROD_ENABLED=$ADMIN_PROD_ENABLED
+USE_FEATURE_TOGGLES=$USE_FEATURE_TOGGLES
+USE_GITHUB=$USE_GITHUB
 TIMESTAMP=$(date +%s)
 EOF
 
@@ -42,14 +44,17 @@ load_state() {
         source "$CONFIG_FILE"
         local current_step=$(cat "$STATE_FILE" 2>/dev/null || echo "0")
 
-        echo -e "${YELLOW}╔════════════════════════════════════════════════════╗${NC}"
-        echo -e "${YELLOW}║   🔄 RESUME DETECTED                               ║${NC}"
-        echo -e "${YELLOW}╚════════════════════════════════════════════════════╝${NC}"
         echo ""
-        echo -e "${CYAN}Previous setup detected:${NC}"
+        echo -e "${YELLOW}═══════════════════════════════════════════════════════════${NC}"
+        echo -e "${YELLOW}PREVIOUS SETUP DETECTED${NC}"
+        echo -e "${YELLOW}═══════════════════════════════════════════════════════════${NC}"
+        echo ""
+        echo -e "${CYAN}Found saved progress:${NC}"
         echo -e "  Project: ${GREEN}$PROJECT_NAME${NC}"
-        echo -e "  Last completed step: ${GREEN}$current_step${NC}"
+        echo -e "  Last completed step: ${GREEN}$current_step of 14${NC}"
         echo -e "  Time: $(date -d @$TIMESTAMP '+%Y-%m-%d %H:%M:%S' 2>/dev/null || date -r $TIMESTAMP '+%Y-%m-%d %H:%M:%S' 2>/dev/null || echo 'Unknown')"
+        echo ""
+        echo -e "${BLUE}💡 You can continue from where you left off!${NC}"
         echo ""
 
         read -p "Resume from step $((current_step + 1))? [Y/n]: " resume_choice
@@ -80,7 +85,7 @@ mark_step_completed() {
 should_skip_step() {
     local step=$1
     if [ "$RESUME_FROM_STEP" -ge "$step" ]; then
-        echo -e "${BLUE}⏭️  Skipping step $step (already completed)${NC}"
+        echo -e "${BLUE}✓ Skipping step $step (already completed)${NC}"
         return 0
     fi
     return 1
@@ -121,17 +126,21 @@ offer_recovery_options() {
     local step_name=$2
 
     echo ""
-    echo -e "${YELLOW}╔════════════════════════════════════════════════════╗${NC}"
-    echo -e "${YELLOW}║   ⚠️  STEP FAILED: $step_name"
-    echo -e "${YELLOW}╚════════════════════════════════════════════════════╝${NC}"
+    echo -e "${YELLOW}⚠️  STEP FAILED: $step_name${NC}"
     echo ""
-    echo -e "${CYAN}Recovery Options:${NC}"
-    echo -e "  1) ${GREEN}Retry${NC} - Try this step again"
+    echo -e "${CYAN}What would you like to do?${NC}"
+    echo ""
+    echo -e "  1) ${GREEN}Retry${NC} - Try this step again right now"
     echo -e "  2) ${YELLOW}Skip${NC} - Skip this step and continue (may cause issues)"
-    echo -e "  3) ${CYAN}Manual${NC} - Mark as completed (I fixed it manually)"
-    echo -e "  4) ${RED}Abort${NC} - Exit setup (you can resume later)"
+    echo -e "  3) ${CYAN}Manual${NC} - I'll fix it manually, mark as done"
+    echo -e "  4) ${RED}Abort${NC} - Stop here, I'll fix it later"
     echo ""
-
+    echo -e "${BLUE}💡 If you choose Abort:${NC}"
+    echo -e "   • Your progress is saved automatically"
+    echo -e "   • Just run ./create-project.sh again to resume from this step"
+    echo -e "   • Check the log file at ~/.launchify/logs/ for details"
+    echo ""
+    
     read -p "Choose option [1-4]: " recovery_choice
 
     case $recovery_choice in
@@ -150,7 +159,14 @@ offer_recovery_options() {
             return 0
             ;;
         4|*)
-            echo -e "${RED}Setup aborted. Run script again to resume.${NC}"
+            echo ""
+            echo -e "${RED}Setup paused at step $step${NC}"
+            echo ""
+            echo -e "${CYAN}To resume:${NC}"
+            echo -e "  1. Fix the issue (check logs at ~/.launchify/logs/)"
+            echo -e "  2. Run: ${GREEN}./create-project.sh${NC}"
+            echo -e "  3. The script will automatically resume from this step"
+            echo ""
             return 1
             ;;
     esac
@@ -162,9 +178,7 @@ handle_service_error() {
     local error_type=$2
 
     echo ""
-    echo -e "${YELLOW}╔════════════════════════════════════════════════════╗${NC}"
-    echo -e "${YELLOW}║   ⚠️  $service SETUP FAILED${NC}"
-    echo -e "${YELLOW}╚════════════════════════════════════════════════════╝${NC}"
+    echo -e "${YELLOW}⚠️  $service SETUP FAILED${NC}"
     echo ""
 
     case $service in
@@ -236,9 +250,7 @@ rollback_project() {
     local project_name=$1
 
     echo ""
-    echo -e "${RED}╔════════════════════════════════════════════════════╗${NC}"
-    echo -e "${RED}║   ⚠️  CRITICAL FAILURE - ROLLBACK OPTION${NC}"
-    echo -e "${RED}╚════════════════════════════════════════════════════╝${NC}"
+    echo -e "${RED}⚠️  CRITICAL FAILURE - ROLLBACK OPTION${NC}"
     echo ""
     echo -e "${YELLOW}The project creation encountered a critical error.${NC}"
     echo ""

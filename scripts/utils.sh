@@ -119,6 +119,10 @@ EOF
     fi
 
     if $use_clerk; then
+        # Use pre-collected keys if available, otherwise use placeholders
+        local clerk_dev_pk="${CLERK_PUBLISHABLE_KEY_DEV:-pk_test_TODO}"
+        local clerk_dev_sk="${CLERK_SECRET_KEY_DEV:-sk_test_TODO}"
+        
         cat >> .env.local << EOF
 # ============================================
 # CLERK AUTHENTICATION
@@ -126,15 +130,17 @@ EOF
 # Development/Preview Environment
 # Get these from: https://dashboard.clerk.com
 # See SETUP_GUIDE.md for detailed instructions
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_TODO
-CLERK_SECRET_KEY=sk_test_TODO
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${clerk_dev_pk}
+CLERK_SECRET_KEY=${clerk_dev_sk}
 
 # Production Environment (set in Vercel for main branch)
+# Separate production keys should be set in Vercel dashboard
 # NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_TODO
 # CLERK_SECRET_KEY=sk_live_TODO
 
 # Clerk URLs (same across all environments)
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
 
@@ -163,6 +169,7 @@ EOF
     fi
 
     if $use_linear; then
+        local linear_key="${LINEAR_API_KEY:-lin_api_TODO}"
         cat >> .env.local << EOF
 # ============================================
 # LINEAR (Issue/Project Tracking)
@@ -170,7 +177,7 @@ EOF
 # Get API key from: https://linear.app/settings/api
 # See SETUP_GUIDE.md for GraphQL setup instructions
 # Same key works across all environments
-LINEAR_API_KEY=lin_api_TODO
+LINEAR_API_KEY=${linear_key}
 LINEAR_TEAM_ID=TODO
 
 # Optional: Webhook secret
@@ -189,19 +196,21 @@ EOF
 EOF
 
         if [ "$ai_provider" = "openai" ] || [ "$ai_provider" = "both" ]; then
+            local openai_key="${OPENAI_API_KEY:-sk-proj-TODO}"
             cat >> .env.local << EOF
 # OpenAI API
 # Get from: https://platform.openai.com/api-keys
-OPENAI_API_KEY=sk-proj-TODO
+OPENAI_API_KEY=${openai_key}
 
 EOF
         fi
 
         if [ "$ai_provider" = "anthropic" ] || [ "$ai_provider" = "both" ]; then
+            local anthropic_key="${ANTHROPIC_API_KEY:-sk-ant-TODO}"
             cat >> .env.local << EOF
 # Anthropic API
 # Get from: https://console.anthropic.com/settings/keys
-ANTHROPIC_API_KEY=sk-ant-TODO
+ANTHROPIC_API_KEY=${anthropic_key}
 
 EOF
         fi
@@ -253,11 +262,22 @@ EOF
     fi
 
     if $use_clerk; then
+        # Use pre-collected production keys if available
+        local clerk_prod_pk="${CLERK_PUBLISHABLE_KEY_PROD:-pk_live_TODO}"
+        local clerk_prod_sk="${CLERK_SECRET_KEY_PROD:-sk_live_TODO}"
+        
         cat >> .env.production.template << EOF
 # Clerk Production
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_TODO
-CLERK_SECRET_KEY=sk_live_TODO
+# These should be set in Vercel dashboard for production environment
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${clerk_prod_pk}
+CLERK_SECRET_KEY=${clerk_prod_sk}
 CLERK_WEBHOOK_SECRET=whsec_TODO
+
+# Clerk URLs (same as development)
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
 
 EOF
     fi
@@ -534,7 +554,7 @@ EOF
 - [ ] All TODO values in .env.local replaced with real values
 - [ ] .env.local is in .gitignore (don't commit secrets!)
 
-## 🚀 Ready to Code!
+## Ready to Code!
 
 Once everything is configured:
 
@@ -564,9 +584,8 @@ show_manual_setup_summary() {
 
     local needs_manual=false
 
-    echo -e "${YELLOW}╔════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${YELLOW}║         📋 MANUAL SETUP REQUIRED                           ║${NC}"
-    echo -e "${YELLOW}╚════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+    echo -e "${YELLOW}MANUAL SETUP REQUIRED${NC}"
     echo ""
 
     # Check if Clerk was automated
@@ -653,9 +672,8 @@ show_manual_setup_summary() {
         echo -e "  ${CYAN}npm run dev${NC}"
         echo ""
     else
-        echo -e "${YELLOW}╔════════════════════════════════════════════════════════════╗${NC}"
-        echo -e "${YELLOW}║  ⚠️  Complete the steps above before running your app     ║${NC}"
-        echo -e "${YELLOW}╚════════════════════════════════════════════════════════════╝${NC}"
+        echo ""
+        echo -e "${YELLOW}⚠️  Complete the steps above before running your app${NC}"
         echo ""
         echo -e "${CYAN}Quick checklist:${NC}"
         echo -e "  1. ${CYAN}Open .env.local in your editor${NC}"
@@ -667,7 +685,7 @@ show_manual_setup_summary() {
         echo ""
     fi
 
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
     echo -e "${BLUE}Documentation:${NC}"
     echo -e "  • ${CYAN}.env.local${NC} - All environment variables with inline comments"
     echo -e "  • ${CYAN}SETUP_GUIDE.md${NC} - Step-by-step setup instructions"
@@ -675,6 +693,5 @@ show_manual_setup_summary() {
     if [ -f "VERCEL_ENVIRONMENT_SETUP.md" ]; then
         echo -e "  • ${CYAN}VERCEL_ENVIRONMENT_SETUP.md${NC} - Production deployment guide"
     fi
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo ""
 }

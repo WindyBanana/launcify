@@ -24,12 +24,21 @@ detect_platform() {
 check_homebrew() {
     if [[ "$PLATFORM" == "macos" ]]; then
         if ! command -v brew &> /dev/null; then
-            echo -e "${YELLOW}⚠️  Homebrew not found${NC}"
+            echo -e "${CYAN}Homebrew Package Manager${NC}"
             echo ""
-            echo "Homebrew is recommended for installing tools on macOS."
+            echo "Homebrew is the standard package manager for macOS development."
+            echo "Many developer tools (including some Launchify features) rely on it."
             echo ""
-            read -p "Install Homebrew now? [Y/n]: " install_brew
-            install_brew=${install_brew:-Y}
+            echo -e "${YELLOW}Installation details:${NC}"
+            echo "  • Package: Homebrew"
+            echo "  • Size: ~400MB"
+            echo "  • Location: /opt/homebrew (Apple Silicon) or /usr/local (Intel)"
+            echo "  • Purpose: Manages installation of developer tools and CLIs"
+            echo ""
+            echo "If you prefer, you can install manually later from https://brew.sh"
+            echo ""
+            read -p "Install Homebrew now? [y/N]: " install_brew
+            install_brew=${install_brew:-N}
 
             if [[ $install_brew =~ ^[Yy]$ ]]; then
                 echo ""
@@ -37,19 +46,18 @@ check_homebrew() {
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
                 if [[ $? -eq 0 ]]; then
-                    echo -e "${GREEN}✓ Homebrew installed${NC}"
+                    echo -e "${GREEN}✓ Homebrew installed successfully${NC}"
 
                     # Add to PATH for current session
                     if [[ -f "/opt/homebrew/bin/brew" ]]; then
                         eval "$(/opt/homebrew/bin/brew shellenv)"
                     fi
                 else
-                    echo -e "${RED}✗ Homebrew installation failed${NC}"
+                    echo -e "${YELLOW}Installation encountered an issue. You can install manually from brew.sh${NC}"
                     return 1
                 fi
             else
-                echo -e "${YELLOW}Skipping Homebrew installation${NC}"
-                echo "Some tools may not be available without Homebrew"
+                echo -e "${BLUE}Skipping Homebrew. You can install tools manually as needed.${NC}"
                 return 1
             fi
         fi
@@ -118,6 +126,109 @@ install_tool_cross_platform() {
     fi
 }
 
+# Smart TUI Installation - offers to install whiptail/dialog if missing
+install_tui_tools() {
+    # Check if either whiptail or dialog is already available
+    if command -v whiptail &> /dev/null || command -v dialog &> /dev/null; then
+        return 0
+    fi
+    
+    echo -e "${CYAN}Enhanced Interactive UI Available${NC}"
+    echo ""
+    echo "Launchify offers two interface modes:"
+    echo ""
+    echo -e "${GREEN}1. CLI Mode${NC} - Traditional text prompts (works everywhere)"
+    echo -e "${BLUE}2. TUI Mode${NC} - Visual menus with checkboxes (enhanced experience)"
+    echo ""
+    echo "TUI mode provides a more intuitive experience with visual selection,"
+    echo "but requires a small utility (dialog or whiptail) to be installed."
+    echo ""
+    echo -e "${YELLOW}Installation details:${NC}"
+    echo "  • Package: 'dialog' (macOS) or 'whiptail' (Linux)"
+    echo "  • Size: ~500KB"
+    echo "  • Method: System package manager (brew/apt/yum/dnf)"
+    echo ""
+    echo "CLI mode is fully functional if you prefer not to install anything."
+    echo ""
+    
+    read -p "Install TUI tools for enhanced experience? [y/N]: " install_tui
+    install_tui=${install_tui:-N}
+    
+    if [[ ! $install_tui =~ ^[Yy]$ ]]; then
+        echo ""
+        echo -e "${GREEN}✓ No problem! Using CLI mode.${NC}"
+        echo ""
+        return 1
+    fi
+    
+    echo ""
+    echo "Installing TUI tools..."
+    
+    # Install based on platform
+    if [[ "$PLATFORM" == "macos" ]]; then
+        if command -v brew &> /dev/null; then
+            echo "Installing dialog via Homebrew..."
+            if brew install dialog; then
+                echo -e "${GREEN}✓ dialog installed successfully${NC}"
+                return 0
+            else
+                echo -e "${RED}✗ Installation failed${NC}"
+                return 1
+            fi
+        else
+            echo -e "${RED}✗ Homebrew required for installation on macOS${NC}"
+            echo "Please install Homebrew first: https://brew.sh"
+            return 1
+        fi
+    elif [[ "$PLATFORM" == "linux" ]]; then
+        # Try different package managers
+        if command -v apt-get &> /dev/null; then
+            echo "Installing whiptail via apt..."
+            if sudo apt-get update && sudo apt-get install -y whiptail; then
+                echo -e "${GREEN}✓ whiptail installed successfully${NC}"
+                return 0
+            else
+                echo -e "${RED}✗ Installation failed${NC}"
+                return 1
+            fi
+        elif command -v yum &> /dev/null; then
+            echo "Installing dialog via yum..."
+            if sudo yum install -y dialog; then
+                echo -e "${GREEN}✓ dialog installed successfully${NC}"
+                return 0
+            else
+                echo -e "${RED}✗ Installation failed${NC}"
+                return 1
+            fi
+        elif command -v pacman &> /dev/null; then
+            echo "Installing dialog via pacman..."
+            if sudo pacman -S --noconfirm dialog; then
+                echo -e "${GREEN}✓ dialog installed successfully${NC}"
+                return 0
+            else
+                echo -e "${RED}✗ Installation failed${NC}"
+                return 1
+            fi
+        elif command -v dnf &> /dev/null; then
+            echo "Installing dialog via dnf..."
+            if sudo dnf install -y dialog; then
+                echo -e "${GREEN}✓ dialog installed successfully${NC}"
+                return 0
+            else
+                echo -e "${RED}✗ Installation failed${NC}"
+                return 1
+            fi
+        else
+            echo -e "${RED}✗ No supported package manager found${NC}"
+            echo "Please install 'whiptail' or 'dialog' manually."
+            return 1
+        fi
+    else
+        echo -e "${RED}✗ Unsupported platform for automatic installation${NC}"
+        return 1
+    fi
+}
+
 setup_platform_tools() {
     detect_platform
 
@@ -128,15 +239,10 @@ setup_platform_tools() {
 
     if [[ "$PLATFORM" == "macos" ]]; then
         check_homebrew
-
-        # Install whiptail for interactive UI (macOS doesn't have it by default)
-        if ! command -v whiptail &> /dev/null; then
-            if command -v brew &> /dev/null; then
-                echo "Installing whiptail for interactive UI..."
-                brew install newt 2>/dev/null || echo "whiptail installation skipped"
-            fi
-        fi
     fi
+    
+    # Offer to install TUI tools if missing
+    install_tui_tools
 
     if [[ "$PLATFORM" == "windows" ]]; then
         echo -e "${YELLOW}⚠️  Windows detected (WSL/Cygwin)${NC}"
