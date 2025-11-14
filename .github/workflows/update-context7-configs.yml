@@ -45,5 +45,18 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "chore: update Context7 configs for new AI editor platforms"
-          git pull --rebase origin master
-          git push origin master
+
+          # Retry push up to 3 times with rebase
+          for i in 1 2 3; do
+            if git push origin master; then
+              echo "Push succeeded"
+              exit 0
+            else
+              echo "Push failed, attempting rebase (attempt $i)"
+              git pull --rebase origin master
+              sleep 2
+            fi
+          done
+
+          echo "Failed to push after 3 attempts"
+          exit 1
