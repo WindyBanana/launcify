@@ -45,7 +45,7 @@ It's free and takes 2 minutes."
 I recommend Clerk for authentication:
 - Easy email + social login
 - User profiles and management
-- Free up to 10,000 users
+- Free up to 10,000 monthly active users
 - Takes about 10 minutes to set up
 
 Want me to add it?"
@@ -70,7 +70,7 @@ Want me to add it?"
 Want to save it permanently? I recommend Convex:
 - Stores data in the cloud
 - Real-time updates (like Google Docs)
-- Free for small projects
+- Free tier: 1 million function calls/month
 - Takes about 10 minutes to set up
 
 Should I add it?"
@@ -122,7 +122,7 @@ I recommend Axiom:
 - See all errors in one dashboard
 - Track user behavior
 - Debug production issues
-- Free for small apps (500MB logs/month)
+- Free tier: 500 GB/month
 
 This helps catch bugs before users report them.
 Want me to add it?"
@@ -148,7 +148,7 @@ I recommend Linear:
 - Users can report bugs directly
 - Track feature requests
 - Organize and prioritize issues
-- Free for small teams
+- Free with 250 active issues (unlimited team members)
 
 Want me to add a feedback form?"
 ```

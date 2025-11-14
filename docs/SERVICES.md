@@ -16,7 +16,7 @@ Your AI can set up these services for you. Just ask!
 - Social login (Google, GitHub, etc.)
 - User profiles
 - Password reset
-- Free up to 10,000 users
+- Free up to 10,000 monthly active users
 
 **Your AI will:**
 1. Install Clerk
@@ -41,7 +41,7 @@ Your AI can set up these services for you. Just ask!
 - Permanent data storage
 - Real-time updates (like Google Docs)
 - Built-in queries and functions
-- Free tier: 1GB storage
+- Free tier: 1 million function calls/month
 
 **Your AI will:**
 1. Install Convex
@@ -93,7 +93,7 @@ Your AI can set up these services for you. Just ask!
 - See all errors in one place
 - Track user behavior
 - Monitor performance
-- Free tier: 500MB logs/month
+- Free tier: 500 GB/month
 
 **Your AI will:**
 1. Install Axiom
@@ -119,7 +119,7 @@ Your AI can set up these services for you. Just ask!
 - Bug report form
 - Feature request system
 - Track all issues in Linear
-- Free for small teams
+- Free with 250 active issues (unlimited team members)
 
 **Your AI will:**
 1. Install Linear integration

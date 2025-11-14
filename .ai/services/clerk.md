@@ -39,7 +39,7 @@ but you don't have to build it yourself."
 - Social login (Google, GitHub, etc.)
 - User profiles and management
 - Password reset functionality
-- Free up to 10,000 users
+- Free up to 10,000 monthly active users
 
 ⚠️ Setup requires:
 - Free Clerk account signup (~1 minute)

@@ -25,7 +25,7 @@ Instead of data disappearing when you refresh the page, Convex:
 - Updates all users in real-time (like Google Docs)
 - Works automatically with your React components
 
-It's free for small projects and handles all the database complexity for you."
+It's free with 1 million function calls/month and handles all the database complexity for you."
 ```
 
 ## Setup Process
@@ -39,7 +39,7 @@ It's free for small projects and handles all the database complexity for you."
 - Store data permanently (users, posts, etc.)
 - Real-time updates (changes appear instantly)
 - Built-in authentication support
-- Free tier: 1GB storage, plenty for getting started
+- Free tier: 1 million function calls/month
 
 ⚠️ Setup requires:
 - Free Convex account (1 minute signup)

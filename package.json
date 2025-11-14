@@ -50,6 +50,8 @@
     "cursor",
     "windsurf",
     "claude-code",
+    "openai-codex",
+    "github-copilot",
     "non-developers",
     "no-code"
   ],

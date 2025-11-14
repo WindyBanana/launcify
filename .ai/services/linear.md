@@ -30,7 +30,7 @@ You can:
 - Update users when you fix/build something
 - Track your progress on each issue
 
-It's free for small teams and keeps you organized!"
+It's free with 250 active issues (unlimited team members) and keeps you organized!"
 ```
 
 ## Setup Process
@@ -45,7 +45,7 @@ It's free for small teams and keeps you organized!"
 - Feature request system
 - Track all issues in Linear dashboard
 - Notify users when you fix things
-- Free for small teams (up to 10 members)
+- Free with 250 active issues (unlimited team members)
 
 ⚠️ Setup requires:
 - Free Linear account (1 minute)

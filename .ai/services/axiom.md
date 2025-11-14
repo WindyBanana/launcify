@@ -28,7 +28,7 @@ It records:
 When something breaks, you can 'replay' what happened
 to understand and fix it.
 
-It's free for up to 500MB/month (plenty for small apps)."
+It's free with 500 GB/month (plenty for most apps)."
 ```
 
 ## Setup Process
@@ -43,7 +43,7 @@ It's free for up to 500MB/month (plenty for small apps)."
 - Track user behavior and flows
 - Monitor app performance
 - Debug production issues easily
-- Free tier: 500MB logs/month
+- Free tier: 500 GB/month
 
 ⚠️ Setup requires:
 - Free Axiom account (1 minute)

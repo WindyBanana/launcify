@@ -182,7 +182,7 @@ This means:
 - Users can sign up with email or Google/GitHub
 - You'll need a free Clerk account (I'll guide you)
 - Users get profiles automatically
-- Free for up to 10,000 users
+- Free for up to 10,000 monthly active users
 
 Takes about 10 minutes to set up. Ready?"
 ```

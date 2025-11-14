@@ -14,6 +14,7 @@ All major AI coding assistants:
 - Cursor
 - Windsurf
 - Claude Code
+- OpenAI Codex (included with ChatGPT Plus/Pro)
 - VS Code with GitHub Copilot
 - Any other AI assistant
 
@@ -177,6 +178,7 @@ Yes! The template is completely free (MIT license).
 AI editors have different pricing:
 - Cursor: ~$20/month
 - Windsurf: ~$10/month
+- OpenAI Codex: Included with ChatGPT Plus ($20/month) or Pro ($200/month)
 - GitHub Copilot: ~$10/month
 - Claude Code: Free with usage limits
 
@@ -189,9 +191,10 @@ Choose the one that fits your budget.
 **Custom domain:** $10-15/year if you want yourname.com
 
 Most services have generous free tiers:
-- Clerk: Free up to 10,000 users
-- Convex: Free for small projects
-- Axiom: Free 500MB logs/month
+- Clerk: Free up to 10,000 monthly active users
+- Convex: Free tier with 1 million function calls/month
+- Axiom: Free tier with 500 GB/month
+- Linear: Free with 250 active issues (unlimited team members)
 
 ### Can I make money with apps built using this?
 

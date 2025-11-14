@@ -22,6 +22,7 @@ Open your new repository in any AI coding assistant:
 - Cursor
 - Windsurf
 - Claude Code
+- OpenAI Codex (ChatGPT Plus/Pro)
 - VS Code with Copilot
 - Or any other AI assistant
 
