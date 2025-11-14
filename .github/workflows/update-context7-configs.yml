@@ -23,11 +23,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Fetch latest changes
+        run: |
+          git fetch origin master
+          git pull origin master
 
       - name: Fetch Context7 supported platforms
         id: fetch
@@ -47,4 +53,4 @@ jobs:
           git add -A
           git commit -m "chore: update Context7 configs for new AI editor platforms"
           git pull --rebase origin master
-          git push
+          git push origin master
