@@ -41,6 +41,7 @@ jobs:
       - name: Commit and push if changed
         if: steps.changes.outputs.changed == 'true'
         run: |
+          set +e  # Don't exit on error
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
@@ -48,15 +49,20 @@ jobs:
 
           # Retry push up to 3 times with rebase
           for i in 1 2 3; do
-            if git push origin master; then
-              echo "Push succeeded"
+            echo "Push attempt $i..."
+            git push origin master
+            if [ $? -eq 0 ]; then
+              echo "✓ Push succeeded"
               exit 0
             else
-              echo "Push failed, attempting rebase (attempt $i)"
-              git pull --rebase origin master
-              sleep 2
+              echo "✗ Push failed"
+              if [ $i -lt 3 ]; then
+                echo "Rebasing and retrying..."
+                git pull --rebase origin master
+                sleep 2
+              fi
             fi
           done
 
-          echo "Failed to push after 3 attempts"
+          echo "✗ Failed to push after 3 attempts"
           exit 1
