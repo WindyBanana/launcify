@@ -37,5 +37,7 @@ jobs:
       - name: Commit and push if changed
         if: steps.changes.outputs.changed == 'true'
         run: |
+          echo "=== Starting push with retry script ==="
+          ls -la .github/scripts/push-with-retry.sh
           chmod +x .github/scripts/push-with-retry.sh
           .github/scripts/push-with-retry.sh
