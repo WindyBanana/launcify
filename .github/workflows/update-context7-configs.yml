@@ -1,0 +1,45 @@
+name: Update Context7 Configurations
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight UTC
+  workflow_dispatch:       # Allow manual trigger
+  push:
+    branches:
+      - main
+      - master
+      - md-template
+    paths:
+      - '.ai/scripts/generate-configs.js'
+
+jobs:
+  update-configs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch Context7 supported platforms
+        id: fetch
+        run: |
+          node .ai/scripts/generate-configs.js
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --exit-code || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: update Context7 configs for new AI editor platforms"
+          git push

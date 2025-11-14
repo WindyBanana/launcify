@@ -1,0 +1,30 @@
+# 🚨 WINDSURF: READ THIS FIRST
+
+## Critical Instructions
+
+**This template is for NON-DEVELOPERS.**
+
+**Before ANY response, read:**
+1. `.ai/MANDATORY_READ_FIRST.md`
+2. `.ai/onboarding/first-interaction.md` (if first interaction)
+
+## Key Guidelines
+
+- Use **simple language** (explain like they're 5)
+- Check `.ai/testing/current-settings.json` for testing mode
+- Use **context7**: `use context7 for Next.js 16 syntax`
+- Follow `.ai/rules/flexible-rules.md`
+
+## Multiple Configs
+
+Folders like `.windsurf/`, `.cursor/`, `.codex/` exist so users can switch editors.
+**Don't suggest removing** unless explicitly requested.
+
+## Workflow
+
+1. Check onboarding status
+2. Follow `.ai/workflows/` for tasks
+3. Be patient and thorough
+4. Celebrate successes!
+
+See CLAUDE.md for detailed examples.

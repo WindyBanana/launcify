@@ -1,0 +1,12 @@
+# Context7 Configuration (DISABLED by default)
+# Context7 provides up-to-date documentation for AI assistants
+#
+# To enable:
+# 1. Sign up at https://context7.com/dashboard for free API key
+# 2. Run: npm run setup-context7
+# 3. Restart Codex
+#
+# Uncomment and add your API key:
+# [mcp.servers.context7]
+# command = "npx"
+# args = ["-y", "@upstash/context7-mcp", "--api-key", "YOUR_CONTEXT7_API_KEY"]

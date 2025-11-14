@@ -1,0 +1,32 @@
+# 🚨 CURSOR: READ THIS FIRST
+
+## Before Responding to ANY User Request
+
+**YOU MUST READ:**
+1. `.ai/MANDATORY_READ_FIRST.md` - Critical instructions
+2. `.ai/onboarding/first-interaction.md` - If this is user's first request
+
+## Key Points
+
+- This template is for **NON-DEVELOPERS**
+- Use **simple language** (explain like they're 5 years old)
+- Always check `.ai/testing/current-settings.json` for testing preferences
+- Use **context7** for up-to-date documentation: `use context7 for Next.js 16 syntax`
+- Follow flexible rules from `.ai/rules/flexible-rules.md`
+
+## Multiple Config Folders
+
+You'll see `.cursor/`, `.windsurf/`, `.codex/`, etc.
+**This is intentional!** Users may switch between AI editors.
+Do NOT suggest removing them unless user explicitly wants to.
+
+See: `.ai/config-management/explaining-configs.md`
+
+## Workflow
+
+1. Check if onboarding needed (`.ai/onboarding/completed.json` exists?)
+2. If not, run onboarding workflow
+3. Follow appropriate workflow from `.ai/workflows/`
+4. Be patient, kind, and thorough
+
+**Remember:** User is relying on you to build their dream. Don't overwhelm them with jargon!
