@@ -79,15 +79,17 @@ Your AI has been pre-configured with instructions to help you set up these servi
 
 ---
 
-## 🔄 Always Up-to-Date
+## 🔄 Auto-Discovery of New AI Editors
 
-This template automatically stays current with the latest AI editors!
+Your project includes a GitHub Action that checks daily for new AI coding assistants and automatically generates configuration files for them.
 
-**What happens:** Every day, a GitHub Action checks for new AI coding assistants (like Cursor, Windsurf, etc.) and automatically generates configuration files so they work with your project right away.
+**What happens:** Every day, the action checks if new AI editors (like Cursor, Windsurf, etc.) have been released and creates the necessary config files so they work with your project right away.
 
-**What this means for you:** If a brand new AI editor launches tomorrow, your project will support it automatically - no manual updates needed. You can switch between any AI editor anytime!
+**What this means for you:** If a brand new AI editor launches tomorrow, your project will support it automatically. You can switch between any AI editor anytime!
 
-The auto-update only adds new editor configs. It never touches your code, settings, or files.
+**Important:** When you clicked "Use this template", you got a snapshot of the scripts at that moment. The action runs with your copy of those scripts. Template improvements made after you created your project won't be included automatically.
+
+The auto-discovery only adds new editor configs. It never touches your code, settings, or files.
 
 ---
 
