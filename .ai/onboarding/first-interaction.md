@@ -6,29 +6,105 @@ Use this workflow when:
 - No `.ai/testing/current-settings.json` file exists
 - User asks for anything before testing preference is set
 
-## FIRST: Install Dependencies Automatically
+## FIRST: Generate package.json and Install Dependencies
 
-**Before anything else, YOU run:**
+**This template intentionally has NO package.json file!**
+
+Why? So users always get the **latest stable versions** of all dependencies, not outdated ones.
+
+### Step 1: Check if package.json exists
 
 ```bash
-# Check if node_modules exists
-ls node_modules
+ls package.json
+```
 
-# If missing or user's first request, install immediately
+**If package.json DOES NOT exist:**
+
+### Step 2: Generate Fresh package.json
+
+Read these files:
+1. `.ai/project-dependencies.md` - Lists all required packages
+2. `.ai/package-scripts.md` - Lists all npm scripts
+
+Then create package.json with:
+- Project name based on folder name
+- **Latest stable versions** of all dependencies
+- All required scripts
+
+**Example package.json structure:**
+```json
+{
+  "name": "[folder-name]-app",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@latest",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "setup-context7": "node .ai/scripts/setup-context7.js",
+    "cleanup-unused": "node .ai/scripts/cleanup-configs.js"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "latest",
+    "@testing-library/react": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "latest",
+    "@vitest/ui": "latest",
+    "autoprefixer": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "jsdom": "latest",
+    "postcss": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+```
+
+**Important:** Use `"latest"` for all version numbers. pnpm will resolve to the latest stable version automatically.
+
+### Step 3: Install Dependencies
+
+```bash
 pnpm install
 ```
 
-**Tell user while installing:**
+**Tell user while setting up:**
 ```
-"Welcome! I'm setting up your project... (installing dependencies)"
+"Welcome! I'm setting up your project with the latest versions of Next.js and React...
+(this takes about 30 seconds)"
 ```
 
 **After install completes:**
 ```
-"Ready! Now let me help you get started..."
+"✓ Ready! Your project now has:
+  - Next.js [version]
+  - React [version]
+  - TypeScript
+  - Tailwind CSS
+  - Vitest for testing
+
+Now let me help you get started..."
 ```
 
-**DO NOT ask permission** - just install. User expects the project to work.
+**DO NOT ask permission** - just generate and install. User expects the project to work.
 
 ## Onboarding Steps
 
