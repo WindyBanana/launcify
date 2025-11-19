@@ -79,6 +79,18 @@ Your AI has been pre-configured with instructions to help you set up these servi
 
 ---
 
+## 🔄 Always Up-to-Date
+
+This template automatically stays current with the latest AI editors!
+
+**What happens:** Every day, a GitHub Action checks for new AI coding assistants (like Cursor, Windsurf, etc.) and automatically generates configuration files so they work with your project right away.
+
+**What this means for you:** If a brand new AI editor launches tomorrow, your project will support it automatically - no manual updates needed. You can switch between any AI editor anytime!
+
+The auto-update only adds new editor configs. It never touches your code, settings, or files.
+
+---
+
 ## Documentation
 
 - **[How It Works](docs/HOW_IT_WORKS.md)** - What happens behind the scenes
