@@ -3,8 +3,10 @@
 /**
  * Config Cleanup Script
  *
- * Removes unused AI editor configuration folders, keeping only the one
- * the user is currently using.
+ * Removes unused AI editor configuration folders and files, keeping only
+ * the one the user is currently using.
+ *
+ * Uses .ai/last-update.json to safely track what can be deleted.
  *
  * WARNING: This is NOT recommended unless user is absolutely certain
  * they will only ever use one AI editor.
@@ -14,22 +16,27 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const CONFIG_FOLDERS = [
-  '.cursor',
-  '.windsurf',
-  '.codex',
-  '.vscode',
-  '.continue',
-  '.gemini',
-  '.idx',
-  '.zed',
-  '.warp',
-  '.lmstudio',
-  '.aider',
-  '.cline'
-];
+// Load editor metadata from tracking file
+function loadEditorMetadata() {
+  const metadataPath = path.join(process.cwd(), '.ai/last-update.json');
 
-function detectCurrentEditor() {
+  if (!fs.existsSync(metadataPath)) {
+    console.error('❌ Cannot find .ai/last-update.json');
+    console.error('   This file tracks which configs are safe to delete.');
+    console.error('   Run: node .ai/scripts/generate-configs.js');
+    process.exit(1);
+  }
+
+  try {
+    const content = fs.readFileSync(metadataPath, 'utf8');
+    return JSON.parse(content);
+  } catch (error) {
+    console.error('❌ Error reading metadata:', error.message);
+    process.exit(1);
+  }
+}
+
+function detectCurrentEditor(metadata) {
   // Check environment variables
   if (process.env.CURSOR_PROJECT) return 'cursor';
   if (process.env.WINDSURF_PROJECT) return 'windsurf';
@@ -37,12 +44,17 @@ function detectCurrentEditor() {
   if (process.env.ZED_PROJECT) return 'zed';
 
   // Check which config folder has been accessed recently
-  const stats = CONFIG_FOLDERS.map(folder => {
+  const editorFolders = Object.entries(metadata.editors || {}).map(([name, config]) => ({
+    name,
+    folder: config.folder
+  }));
+
+  const stats = editorFolders.map(({ name, folder }) => {
     const fullPath = path.join(process.cwd(), folder);
     if (fs.existsSync(fullPath)) {
       try {
         const stat = fs.statSync(fullPath);
-        return { folder, accessed: stat.atimeMs };
+        return { editor: name, accessed: stat.atimeMs };
       } catch (e) {
         return null;
       }
@@ -53,7 +65,7 @@ function detectCurrentEditor() {
   // Return most recently accessed
   if (stats.length > 0) {
     stats.sort((a, b) => b.accessed - a.accessed);
-    return stats[0].folder.replace('.', '');
+    return stats[0].editor;
   }
 
   return null;
@@ -82,7 +94,9 @@ async function cleanup() {
   console.log('Other editors will get outdated documentation and broken code.\n');
   console.log('═'.repeat(60));
 
-  const current = detectCurrentEditor();
+  // Load metadata for safe deletion tracking
+  const metadata = loadEditorMetadata();
+  const current = detectCurrentEditor(metadata);
 
   if (!current) {
     console.log('\n❌ Could not detect current editor. Aborting for safety.');
@@ -92,17 +106,69 @@ async function cleanup() {
 
   console.log(`\n✓ Detected editor: ${current}\n`);
 
-  // Count how many configs exist
-  const existing = CONFIG_FOLDERS.filter(folder =>
-    fs.existsSync(path.join(process.cwd(), folder))
-  );
+  // Build list of files/folders that can be safely deleted
+  const toDelete = {
+    folders: [],
+    files: []
+  };
 
-  console.log(`You currently have ${existing.length} editor configs:`);
-  existing.forEach(folder => console.log(`  - ${folder}`));
+  let editorCount = 0;
+  for (const [editorName, config] of Object.entries(metadata.editors || {})) {
+    // Skip current editor
+    if (editorName === current) continue;
+
+    // Only delete if explicitly marked as safe
+    if (config.safe_to_delete !== true) {
+      console.log(`⚠️  Skipping ${editorName} (not marked as safe to delete)`);
+      continue;
+    }
+
+    editorCount++;
+
+    // Add folder if it exists
+    if (config.folder && fs.existsSync(path.join(process.cwd(), config.folder))) {
+      toDelete.folders.push(config.folder);
+    }
+
+    // Add instruction file(s) if they exist
+    if (config.instruction_file) {
+      const filePath = path.join(process.cwd(), config.instruction_file);
+      if (fs.existsSync(filePath)) {
+        toDelete.files.push(config.instruction_file);
+      }
+    }
+
+    if (config.instruction_files) {
+      for (const file of config.instruction_files) {
+        const filePath = path.join(process.cwd(), file);
+        if (fs.existsSync(filePath)) {
+          toDelete.files.push(file);
+        }
+      }
+    }
+  }
+
+  if (toDelete.folders.length === 0 && toDelete.files.length === 0) {
+    console.log('\n✓ Nothing to clean up. All configs are for your current editor.\n');
+    return;
+  }
+
+  // Show what will be deleted
+  console.log(`Found ${editorCount} other editor(s) to remove:\n`);
+
+  if (toDelete.folders.length > 0) {
+    console.log('Folders to delete:');
+    toDelete.folders.forEach(f => console.log(`  - ${f}/`));
+  }
+
+  if (toDelete.files.length > 0) {
+    console.log('\nFiles to delete:');
+    toDelete.files.forEach(f => console.log(`  - ${f}`));
+  }
   console.log('');
 
   const confirmed = await confirm(
-    `Keep ONLY .${current}/ and delete the other ${existing.length - 1} configs? (yes/no): `
+    `Keep ONLY ${current} configs and delete ${toDelete.folders.length + toDelete.files.length} items? (yes/no): `
   );
 
   if (!confirmed) {
@@ -115,22 +181,32 @@ async function cleanup() {
   console.log('\n🧹 Cleaning up unused configurations...\n');
 
   let removed = 0;
-  for (const folder of CONFIG_FOLDERS) {
-    if (folder === `.${current}`) continue;
 
+  // Delete folders
+  for (const folder of toDelete.folders) {
     const fullPath = path.join(process.cwd(), folder);
-    if (fs.existsSync(fullPath)) {
-      try {
-        fs.rmSync(fullPath, { recursive: true, force: true });
-        console.log(`  ✓ Removed ${folder}/`);
-        removed++;
-      } catch (error) {
-        console.log(`  ✗ Failed to remove ${folder}/: ${error.message}`);
-      }
+    try {
+      fs.rmSync(fullPath, { recursive: true, force: true });
+      console.log(`  ✓ Removed ${folder}/`);
+      removed++;
+    } catch (error) {
+      console.log(`  ✗ Failed to remove ${folder}/: ${error.message}`);
     }
   }
 
-  console.log(`\n✨ Cleaned up ${removed} configurations.`);
+  // Delete files
+  for (const file of toDelete.files) {
+    const fullPath = path.join(process.cwd(), file);
+    try {
+      fs.unlinkSync(fullPath);
+      console.log(`  ✓ Removed ${file}`);
+      removed++;
+    } catch (error) {
+      console.log(`  ✗ Failed to remove ${file}: ${error.message}`);
+    }
+  }
+
+  console.log(`\n✨ Cleaned up ${removed} items.`);
   console.log(`⚠️  Context7 now ONLY works in ${current}.\n`);
 
   // Create a restore script

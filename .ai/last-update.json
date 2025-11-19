@@ -1,11 +1,70 @@
 {
-  "timestamp": "2025-11-19T01:52:37.984Z",
+  "version": "1.1.0",
+  "timestamp": "2025-11-19T10:30:06.619Z",
+  "generated_by": "GitHub Actions",
+  "source": "https://github.com/upstash/context7",
   "platforms": [
     "cursor",
     "vscode",
     "windsurf",
     "codex"
   ],
-  "generatedBy": "GitHub Actions",
-  "source": "https://github.com/upstash/context7"
+  "editors": {
+    "cursor": {
+      "folder": ".cursor",
+      "mcp_config": ".cursor/mcp_settings.json",
+      "instruction_file": ".cursorrules",
+      "part_of_template": true,
+      "auto_generated": false,
+      "safe_to_delete": true
+    },
+    "vscode": {
+      "folder": ".vscode",
+      "mcp_config": ".vscode/settings.json",
+      "instruction_file": null,
+      "part_of_template": true,
+      "auto_generated": false,
+      "safe_to_delete": false
+    },
+    "windsurf": {
+      "folder": ".windsurf",
+      "mcp_config": ".windsurf/mcp.json",
+      "instruction_file": ".windsurfrules",
+      "part_of_template": true,
+      "auto_generated": false,
+      "safe_to_delete": true
+    },
+    "codex": {
+      "folder": ".codex",
+      "mcp_config": ".codex/config.toml",
+      "instruction_file": "CODEX.md",
+      "part_of_template": true,
+      "auto_generated": false,
+      "safe_to_delete": true
+    }
+  },
+  "protected_files": [
+    "README.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "LICENSE.md",
+    "TEMPLATE_SUMMARY.md",
+    "THIRD_PARTY_LICENSES.md",
+    "package.json",
+    "tsconfig.json",
+    "next.config.js",
+    "vitest.config.ts",
+    ".gitignore"
+  ],
+  "protected_folders": [
+    ".ai",
+    ".github",
+    "app",
+    "components",
+    "docs",
+    "lib",
+    "node_modules",
+    ".next",
+    ".git"
+  ]
 }

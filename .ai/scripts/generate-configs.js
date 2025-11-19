@@ -25,11 +25,59 @@ function fetch(url) {
   });
 }
 
+// Known instruction file conventions (from Context7 README and editor docs)
+const KNOWN_INSTRUCTION_FILES = {
+  'cursor': '.cursorrules',
+  'windsurf': '.windsurfrules',
+  'claude-code': 'CLAUDE.md',
+  'codex': 'CODEX.md'
+};
+
+// Template for instruction files
+function createInstructionContent(editorName) {
+  const displayName = editorName.toUpperCase().replace('-', ' ');
+  return `# 🚨 ${displayName}: READ THIS FIRST
+
+## Before Responding to ANY User Request
+
+**YOU MUST READ:**
+1. \`.ai/MANDATORY_READ_FIRST.md\` - Critical instructions
+2. \`.ai/onboarding/first-interaction.md\` - If this is user's first request
+
+## Key Points
+
+- This template is for **NON-DEVELOPERS**
+- Use **simple language** (explain like they're 5 years old)
+- Always check \`.ai/testing/current-settings.json\` for testing preferences
+- Use **context7** for up-to-date documentation: \`use context7 for Next.js 16 syntax\`
+- Follow flexible rules from \`.ai/rules/flexible-rules.md\`
+
+## Multiple Config Folders
+
+You'll see \`.cursor/\`, \`.windsurf/\`, \`.codex/\`, etc.
+**This is intentional!** Users may switch between AI editors.
+Do NOT suggest removing them unless user explicitly wants to.
+
+See: \`.ai/config-management/explaining-configs.md\`
+
+## Workflow
+
+1. Check if onboarding needed (\`.ai/onboarding/completed.json\` exists?)
+2. If not, run onboarding workflow
+3. Follow appropriate workflow from \`.ai/workflows/\`
+4. Be patient, kind, and thorough
+
+**Remember:** User is relying on you to build their dream. Don't overwhelm them with jargon!
+`;
+}
+
 // Platform configurations
 const PLATFORM_CONFIGS = {
   cursor: {
     path: '.cursor/mcp_settings.json',
+    instructionFile: '.cursorrules',
     format: 'json',
+    partOfTemplate: true,
     template: () => ({
       mcpServers: {
         "context7-disabled": {
@@ -45,7 +93,9 @@ const PLATFORM_CONFIGS = {
   },
   windsurf: {
     path: '.windsurf/mcp.json',
+    instructionFile: '.windsurfrules',
     format: 'json',
+    partOfTemplate: true,
     template: () => ({
       mcpServers: {
         "context7-disabled": {
@@ -63,7 +113,9 @@ const PLATFORM_CONFIGS = {
   },
   vscode: {
     path: '.vscode/settings.json',
+    instructionFile: null, // VS Code might have user settings - don't auto-generate
     format: 'json',
+    partOfTemplate: true,
     template: () => ({
       "github.copilot.mcp.servers": {
         "context7-disabled": {
@@ -131,7 +183,9 @@ const PLATFORM_CONFIGS = {
   },
   codex: {
     path: '.codex/config.toml',
+    instructionFile: 'CODEX.md',
     format: 'toml',
+    partOfTemplate: true,
     template: () => `# Context7 Configuration (DISABLED by default)
 # Context7 provides up-to-date documentation for AI assistants
 #
@@ -274,6 +328,46 @@ function generateConfigFile(platform) {
   console.log(`✓ Generated ${configPath}`);
 }
 
+function generateInstructionFiles(editorName, knownFile = null) {
+  const generatedFiles = [];
+
+  if (knownFile) {
+    // We know the convention, generate only that file
+    const filePath = path.join(process.cwd(), knownFile);
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, createInstructionContent(editorName), 'utf8');
+      console.log(`✓ Generated ${knownFile}`);
+      generatedFiles.push(knownFile);
+    }
+  } else {
+    // Unknown editor - use shotgun approach (generate multiple common patterns)
+    const patterns = [
+      `.${editorName}rules`,                    // Pattern 1: .cursorrules, .windsurfrules
+      `${editorName.toUpperCase()}.md`,         // Pattern 2: CLAUDE.md, CODEX.md
+      `.${editorName}/README.md`                // Pattern 3: Universal fallback
+    ];
+
+    for (const pattern of patterns) {
+      const filePath = path.join(process.cwd(), pattern);
+      const dir = path.dirname(filePath);
+
+      // Create directory if needed
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+
+      // Generate file
+      if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, createInstructionContent(editorName), 'utf8');
+        console.log(`✓ Generated ${pattern}`);
+        generatedFiles.push(pattern);
+      }
+    }
+  }
+
+  return generatedFiles;
+}
+
 async function main() {
   try {
     console.log('\n🤖 Context7 Configuration Generator\n');
@@ -282,11 +376,42 @@ async function main() {
 
     console.log(`\n📦 Generating configs for ${platforms.length} platforms\n`);
 
+    // Track all editors and their files
+    const editorTracking = {};
+
     for (const platform of platforms) {
+      const editorName = platform.name;
+      const isPartOfTemplate = platform.partOfTemplate === true;
+      const knownInstructionFile = platform.instructionFile || KNOWN_INSTRUCTION_FILES[editorName];
+
+      // Generate MCP config
       generateConfigFile(platform);
+
+      // Generate instruction files for new platforms
+      let instructionFiles = [];
+      if (!isPartOfTemplate && knownInstructionFile) {
+        // Known convention but new platform
+        instructionFiles = generateInstructionFiles(editorName, knownInstructionFile);
+      } else if (!isPartOfTemplate && !knownInstructionFile) {
+        // Unknown platform - use shotgun approach
+        console.log(`⚠️  New editor detected: ${editorName} (using multi-pattern approach)`);
+        instructionFiles = generateInstructionFiles(editorName, null);
+      }
+
+      // Track this editor
+      const folderName = path.dirname(platform.path);
+      editorTracking[editorName] = {
+        folder: folderName,
+        mcp_config: platform.path,
+        instruction_file: knownInstructionFile || null,
+        instruction_files: instructionFiles.length > 0 ? instructionFiles : undefined,
+        part_of_template: isPartOfTemplate,
+        auto_generated: !isPartOfTemplate,
+        safe_to_delete: editorName !== 'vscode' // VS Code might have user settings
+      };
     }
 
-    // Update metadata file
+    // Update metadata file with comprehensive tracking
     const metadataPath = path.join(process.cwd(), '.ai/last-update.json');
     const metadataDir = path.dirname(metadataPath);
 
@@ -294,17 +419,46 @@ async function main() {
       fs.mkdirSync(metadataDir, { recursive: true });
     }
 
+    const metadata = {
+      version: '1.1.0',
+      timestamp: new Date().toISOString(),
+      generated_by: 'GitHub Actions',
+      source: 'https://github.com/upstash/context7',
+      platforms: platforms.map(p => p.name),
+      editors: editorTracking,
+      protected_files: [
+        'README.md',
+        'CONTRIBUTING.md',
+        'LICENSE',
+        'LICENSE.md',
+        'TEMPLATE_SUMMARY.md',
+        'THIRD_PARTY_LICENSES.md',
+        'package.json',
+        'tsconfig.json',
+        'next.config.js',
+        'vitest.config.ts',
+        '.gitignore'
+      ],
+      protected_folders: [
+        '.ai',
+        '.github',
+        'app',
+        'components',
+        'docs',
+        'lib',
+        'node_modules',
+        '.next',
+        '.git'
+      ]
+    };
+
     fs.writeFileSync(
       metadataPath,
-      JSON.stringify({
-        timestamp: new Date().toISOString(),
-        platforms: platforms.map(p => p.name),
-        generatedBy: 'GitHub Actions',
-        source: 'https://github.com/upstash/context7'
-      }, null, 2)
+      JSON.stringify(metadata, null, 2)
     );
 
-    console.log('\n✨ All Context7 configurations updated!\n');
+    console.log('\n✨ All Context7 configurations updated!');
+    console.log(`📝 Metadata saved to .ai/last-update.json\n`);
 
   } catch (error) {
     console.error('❌ Error:', error.message);
