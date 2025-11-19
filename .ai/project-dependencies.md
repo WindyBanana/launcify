@@ -62,11 +62,15 @@ Why: Type safety and better IDE support
 
 ```
 Packages:
-- tailwindcss (latest stable, 3.x or newer)
+- tailwindcss (version: "^3.4.0" - pinned to v3 until v4 is fully stable)
 - postcss (latest stable)
 - autoprefixer (latest stable)
 
 Why: Utility-first CSS framework
+
+IMPORTANT: Use "^3.4.0" for tailwindcss (not "latest") to avoid breaking changes from Tailwind v4.
+Tailwind v4 requires @tailwindcss/postcss and has different configuration.
+Once Tailwind v4 is stable and tested, update this range.
 ```
 
 ### Testing
@@ -105,13 +109,15 @@ When generating package.json, use these values:
   "version": "0.1.0",
   "private": true,
   "description": "Built with AI assistance using the Launcify template",
-  "packageManager": "pnpm@latest",
+  "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18.0.0"
   },
   "license": "MIT"
 }
 ```
+
+**Note about packageManager field:** Use a specific version (e.g., "pnpm@9.0.0") not "latest". The packageManager field requires a semver version and will fail with "latest".
 
 **Note:** Replace `[folder-name]` with the actual project directory name.
 

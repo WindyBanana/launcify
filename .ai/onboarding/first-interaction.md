@@ -37,7 +37,7 @@ Then create package.json with:
   "name": "[folder-name]-app",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@latest",
+  "packageManager": "pnpm@9.0.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -68,7 +68,7 @@ Then create package.json with:
     "eslint-config-next": "latest",
     "jsdom": "latest",
     "postcss": "latest",
-    "tailwindcss": "latest",
+    "tailwindcss": "^3.4.0",
     "typescript": "latest",
     "vitest": "latest"
   },
