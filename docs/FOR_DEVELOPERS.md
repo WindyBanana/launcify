@@ -121,7 +121,7 @@ Each contains MCP (Model Context Protocol) configuration for Context7.
 Context7 is disabled by default. To enable:
 
 ```bash
-npm run setup-context7
+pnpm run setup-context7
 ```
 
 This script:
@@ -164,9 +164,9 @@ Mode is saved in `.ai/testing/current-settings.json` and respected throughout.
 ### Scripts
 
 ```bash
-npm test              # Run tests
-npm run test:ui       # Run with UI
-npm run test:coverage # Run with coverage
+pnpm test              # Run tests
+pnpm run test:ui       # Run with UI
+pnpm run test:coverage # Run with coverage
 ```
 
 ## Customization
@@ -234,10 +234,10 @@ Removes unused editor config folders (optional).
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Start dev server
-npm run dev
+pnpm run dev
 
 # Open http://localhost:3000
 ```
@@ -246,16 +246,16 @@ npm run dev
 
 ```bash
 # Build for production
-npm run build
+pnpm run build
 
 # Start production server
-npm start
+pnpm start
 ```
 
 ### Linting
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 ## Deployment

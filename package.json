@@ -13,7 +13,8 @@
     "setup-context7": "node .ai/scripts/setup-context7.js",
     "cleanup-unused": "node .ai/scripts/cleanup-configs.js"
   },
-  "_comment": "NOTE: Users should NEVER run these scripts directly. The AI assistant runs all commands for them.",
+  "_comment": "NOTE: Users should NEVER run these scripts directly. The AI assistant runs all pnpm commands for them.",
+  "packageManager": "pnpm@9.0.0",
   "dependencies": {
     "next": "^16.0.0",
     "react": "^19.2.0",

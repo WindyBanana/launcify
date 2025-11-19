@@ -19,26 +19,26 @@ This template is designed for non-developers who may:
 ### Development
 ```bash
 # YOU run these, never ask user to run them
-npm install          # Install dependencies
-npm run dev          # Start development server
-npm run build        # Build for production
+pnpm install          # Install dependencies
+pnpm run dev          # Start development server
+pnpm run build        # Build for production
 npm start            # Start production server
-npm run lint         # Run linter
+pnpm run lint         # Run linter
 ```
 
 ### Testing
 ```bash
 # YOU run these
 npm test                    # Run tests
-npm run test:ui             # Run tests with UI
-npm run test:coverage       # Run with coverage
+pnpm run test:ui             # Run tests with UI
+pnpm run test:coverage       # Run with coverage
 ```
 
 ### Setup Scripts
 ```bash
 # YOU run these
-npm run setup-context7      # Enable Context7
-npm run cleanup-unused      # Remove unused config folders
+pnpm run setup-context7      # Enable Context7
+pnpm run cleanup-unused      # Remove unused config folders
 ```
 
 ### Git Commands
@@ -54,7 +54,7 @@ git pull
 ### Package Management
 ```bash
 # YOU run these
-npm install [package-name]
+pnpm install [package-name]
 npm uninstall [package-name]
 npm update
 ```
@@ -65,7 +65,7 @@ npm update
 
 ```
 "To see your app, run:
-npm run dev
+pnpm run dev
 
 Then open http://localhost:3000"
 ```
@@ -75,7 +75,7 @@ Then open http://localhost:3000"
 ```
 "Let me start the development server for you..."
 
-[YOU run: npm run dev using Bash tool]
+[YOU run: pnpm run dev using Bash tool]
 
 "Done! Your app is running at http://localhost:3000"
 ```
@@ -84,7 +84,7 @@ Then open http://localhost:3000"
 
 ```
 "You'll need to install this package:
-npm install shadcn-ui"
+pnpm install shadcn-ui"
 ```
 
 ### ✅ RIGHT - YOU Install
@@ -92,7 +92,7 @@ npm install shadcn-ui"
 ```
 "I'll install the UI components library for you..."
 
-[YOU run: npm install shadcn-ui using Bash tool]
+[YOU run: pnpm install shadcn-ui using Bash tool]
 
 "Installed! Now let me add a button component..."
 ```
@@ -101,7 +101,7 @@ npm install shadcn-ui"
 
 ```
 "To enable Context7, run:
-npm run setup-context7
+pnpm run setup-context7
 
 Then paste your API key when prompted."
 ```
@@ -116,7 +116,7 @@ Then paste your API key when prompted."
 
 Got it? Great! I'll run the setup now..."
 
-[YOU run: npm run setup-context7 using Bash tool]
+[YOU run: pnpm run setup-context7 using Bash tool]
 
 "Paste your API key when you see the prompt below..."
 
@@ -160,7 +160,7 @@ If you're telling the user to run something, STOP and run it yourself.
 **User:** "Deploy to Vercel"
 
 **Your workflow:**
-1. YOU run `npm install vercel` if needed
+1. YOU run `pnpm install vercel` if needed
 2. YOU run `npx vercel login` and guide them through auth
 3. YOU run `npx vercel deploy`
 4. YOU provide the deployment URL
@@ -170,10 +170,10 @@ If you're telling the user to run something, STOP and run it yourself.
 **User:** "I see an error"
 
 **Your workflow:**
-1. YOU run diagnostic commands (`npm run lint`, `npm run build`)
+1. YOU run diagnostic commands (`pnpm run lint`, `pnpm run build`)
 2. YOU identify the issue
 3. YOU fix the code
-4. YOU run `npm run dev` to verify
+4. YOU run `pnpm run dev` to verify
 5. YOU explain what was wrong in simple terms
 
 ## Summary

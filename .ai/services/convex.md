@@ -53,7 +53,7 @@ Sound good?"
 **After user confirms, YOU run:**
 
 ```bash
-npm install convex
+pnpm install convex
 ```
 
 **Tell user:**
@@ -289,7 +289,7 @@ npx convex dev
 **YOU run dev server:**
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 **Tell user:**
@@ -419,7 +419,7 @@ npm list convex
 **If not installed:**
 
 ```bash
-npm install convex
+pnpm install convex
 ```
 
 ### "npx convex dev" not running
@@ -478,7 +478,7 @@ No extra code needed!"
 **When user needs a database:**
 1. Explain Convex in simple terms (smart filing cabinet)
 2. Ask permission
-3. **YOU run `npm install convex`**
+3. **YOU run `pnpm install convex`**
 4. **YOU run `npx convex dev`** (user logs in via browser)
 5. **YOU create schema and queries**
 6. **YOU set up provider**

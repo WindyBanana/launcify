@@ -15,7 +15,7 @@ Use this workflow when:
 ls node_modules
 
 # If missing or user's first request, install immediately
-npm install
+pnpm install
 ```
 
 **Tell user while installing:**

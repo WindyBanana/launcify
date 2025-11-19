@@ -54,7 +54,7 @@ Sound good?"
 **After user confirms, YOU run:**
 
 ```bash
-npm install @clerk/nextjs
+pnpm install @clerk/nextjs
 ```
 
 **Tell user:**
@@ -222,7 +222,7 @@ export default async function DashboardPage() {
 **YOU run:**
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 **Then tell user:**
@@ -329,7 +329,7 @@ The .env.local file is missing keys. Can you provide:
 **YOU add them and restart dev server:**
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ### "redirect_uri mismatch"
@@ -409,7 +409,7 @@ If user wants to customize:
 **When user needs authentication:**
 1. Explain what Clerk does in simple terms
 2. Ask permission
-3. **YOU run `npm install @clerk/nextjs`**
+3. **YOU run `pnpm install @clerk/nextjs`**
 4. Guide user to get API keys
 5. **YOU create all config files**
 6. **YOU create sign-in/up pages**

@@ -32,8 +32,8 @@ You are assisting someone who may have zero coding experience. Your role is to:
 **YOU RUN ALL COMMANDS:**
 - Users NEVER run terminal commands
 - YOU run ALL commands using the Bash tool
-- User says "install X" → YOU run `npm install X` immediately
-- First interaction → YOU run `npm install` automatically
+- User says "install X" → YOU run `pnpm install X` immediately
+- First interaction → YOU run `pnpm install` automatically
 - Diagnostic commands → YOU run immediately, no permission needed
 
 ## Before Responding to ANY User Request
@@ -52,7 +52,7 @@ This template uses Context7 to provide you with current, accurate documentation.
 - Ensure code examples use current APIs and syntax
 
 **If Context7 is not enabled yet:**
-- User can run `npm run setup-context7` to enable it (optional)
+- User can run `pnpm run setup-context7` to enable it (optional)
 - See `.ai/services/context7.md` for setup guidance
 - See `.ai/CONTEXT7_VERIFICATION.md` for testing checklist
 
@@ -106,7 +106,7 @@ You'll see many config folders:
 This lets you switch between Cursor, Claude Code, Windsurf, etc. seamlessly.
 
 **Should we remove unused ones?**
-Not recommended - you might want to use a different editor later. But I can run `npm run cleanup-unused` if you insist."
+Not recommended - you might want to use a different editor later. But I can run `pnpm run cleanup-unused` if you insist."
 
 See: `.ai/config-management/explaining-configs.md` for full explanation.
 
@@ -115,20 +115,20 @@ See: `.ai/config-management/explaining-configs.md` for full explanation.
 ### 1. YOU Run All Commands
 **Users should NEVER have to open a terminal or run commands.**
 
-**Wrong:** "Run `npm install` to install dependencies"
-**Right:** "I'll install the dependencies for you" (then YOU run `npm install`)
+**Wrong:** "Run `pnpm install` to install dependencies"
+**Right:** "I'll install the dependencies for you" (then YOU run `pnpm install`)
 
-**Wrong:** "Run `npm run dev` to start the server"
-**Right:** "I'll start the development server for you" (then YOU run `npm run dev`)
+**Wrong:** "Run `pnpm run dev` to start the server"
+**Right:** "I'll start the development server for you" (then YOU run `pnpm run dev`)
 
-**Wrong:** "Run `npm run setup-context7`"
-**Right:** "I'll set up Context7 for you" (then YOU run `npm run setup-context7`)
+**Wrong:** "Run `pnpm run setup-context7`"
+**Right:** "I'll set up Context7 for you" (then YOU run `pnpm run setup-context7`)
 
 This includes:
-- Installing dependencies (`npm install`)
-- Running dev server (`npm run dev`)
+- Installing dependencies (`pnpm install`)
+- Running dev server (`pnpm run dev`)
 - Running tests (`npm test`)
-- Setup scripts (`npm run setup-*`)
+- Setup scripts (`pnpm run setup-*`)
 - Git commands (`git status`, `git add`, etc.)
 - Any other terminal commands
 

@@ -167,8 +167,8 @@ If it's not quite right, AI adjusts and tries again.
 
 Traditional development requires running commands like:
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 git commit
 ```
 

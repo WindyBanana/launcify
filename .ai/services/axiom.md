@@ -59,7 +59,7 @@ Sound good?"
 **After user confirms, YOU run:**
 
 ```bash
-npm install next-axiom
+pnpm install next-axiom
 ```
 
 **Tell user:**
@@ -269,7 +269,7 @@ export const config = {
 **YOU run dev server:**
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 **YOU trigger a test error:**
@@ -439,7 +439,7 @@ npm list next-axiom
 **If missing, YOU fix it:**
 
 ```bash
-npm install next-axiom
+pnpm install next-axiom
 ```
 
 ### "AXIOM_TOKEN not found"
@@ -457,7 +457,7 @@ cat .env.local
 **When user needs logging/monitoring:**
 1. Explain Axiom (security camera for code)
 2. Ask permission
-3. **YOU run `npm install next-axiom`**
+3. **YOU run `pnpm install next-axiom`**
 4. Guide user to get API token
 5. **YOU configure next.config.js**
 6. **YOU add logger utility**

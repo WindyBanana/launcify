@@ -12,7 +12,7 @@ All AI editor configurations are set up with Context7 **disabled by default**:
 - ✅ Additional editors: Continue, IDX, Gemini, Zed, Warp, LM Studio, Aider, Cline
 
 ### 2. Setup Automation
-- ✅ `npm run setup-context7` - One-command setup script
+- ✅ `pnpm run setup-context7` - One-command setup script
 - ✅ Prompts user for API key
 - ✅ Updates all config files automatically
 - ✅ Renames `context7-disabled` to `context7`
@@ -57,7 +57,7 @@ Users can verify Context7 works by:
 
 1. **Run setup:**
    ```bash
-   npm run setup-context7
+   pnpm run setup-context7
    ```
 
 2. **Follow verification checklist:**
@@ -80,7 +80,7 @@ To enable Context7, users:
 4. Paste it when AI prompts them
 5. Restart their editor when AI tells them to
 
-**The AI runs `npm run setup-context7` - users never run commands.**
+**The AI runs `pnpm run setup-context7` - users never run commands.**
 
 ## 🎯 Design Decisions
 

@@ -84,7 +84,7 @@ This directory contains comprehensive instructions for AI assistants helping non
 
 ### When User's First Request
 1. Read: `onboarding/first-interaction.md`
-2. YOU run: `npm install` (automatic)
+2. YOU run: `pnpm install` (automatic)
 3. Present testing mode options
 4. Save their choice
 5. Proceed with their request

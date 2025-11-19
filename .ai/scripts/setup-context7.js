@@ -150,6 +150,7 @@ function updateTOMLConfig(filePath, apiKey) {
       !line.includes('To enable:') &&
       !line.includes('Sign up at') &&
       !line.includes('Run: npm') &&
+      !line.includes('Run: pnpm') &&
       !line.includes('Restart Codex') &&
       !line.includes('Uncomment and add')
     );

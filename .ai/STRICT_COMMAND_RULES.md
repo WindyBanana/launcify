@@ -11,16 +11,16 @@ Use the Bash tool for every command. No exceptions.
 ### 1. User Explicitly Requests It
 
 **User says:** "Install X"
-**You do:** Immediately run `npm install X` using Bash tool
+**You do:** Immediately run `ppnpm install X` using Bash tool
 
 **User says:** "Start the dev server"
-**You do:** Immediately run `npm run dev` using Bash tool
+**You do:** Immediately run `ppnpm run dev` using Bash tool
 
 **User says:** "Run tests"
-**You do:** Immediately run `npm test` using Bash tool
+**You do:** Immediately run `ppnpm test` using Bash tool
 
 **User says:** "Set up Context7"
-**You do:** Immediately run `npm run setup-context7` using Bash tool
+**You do:** Immediately run `ppnpm run setup-context7` using Bash tool
 
 **Rule:** If user directly asks for a command, execute it immediately. Don't ask for permission.
 
@@ -30,13 +30,13 @@ When troubleshooting or verifying, run these immediately:
 
 ```bash
 node --version          # Check Node version
-npm --version          # Check npm version
+pnpm --version         # Check pnpm version
 pwd                    # Check current directory
 git status             # Check git status
 git remote -v          # Check git remotes
-npm list              # Check installed packages
-npm run build         # Verify build works
-npm run lint          # Check for errors
+ppnpm list             # Check installed packages
+ppnpm run build        # Verify build works
+ppnpm run lint         # Check for errors
 ```
 
 **Rule:** Diagnostic commands are always safe. Run them without asking.
@@ -46,7 +46,7 @@ npm run lint          # Check for errors
 When user opens the project for the first time:
 
 ```bash
-npm install           # Install dependencies immediately
+pnpm install           # Install dependencies immediately
 ```
 
 **Rule:** First interaction = auto-install dependencies. User expects the project to work.
@@ -56,7 +56,7 @@ npm install           # Install dependencies immediately
 If you add dependencies to package.json:
 
 ```bash
-npm install           # Run immediately after saving package.json
+pnpm install           # Run immediately after saving package.json
 ```
 
 **Rule:** Dependencies added → install immediately.
@@ -79,7 +79,7 @@ Should I go ahead?"
 
 **After user confirms:**
 ```bash
-npm install @clerk/nextjs
+pnpm install @clerk/nextjs
 ```
 
 **Rule:** New features with dependencies → explain first, ask permission, then install.
@@ -100,7 +100,7 @@ Want me to set this up?"
 
 **After user confirms:**
 ```bash
-npm install convex
+pnpm install convex
 ```
 
 **Rule:** Services requiring signup/accounts → explain, ask permission.
@@ -109,16 +109,16 @@ npm install convex
 
 **Development (safe, ask if unsure):**
 ```bash
-npm run dev           # Safe - just starts server
-npm run build         # Safe - just builds locally
-npm test              # Safe - runs tests
+pnpm run dev           # Safe - just starts server
+pnpm run build         # Safe - just builds locally
+pnpm test              # Safe - runs tests
 ```
 
 **Production (ask first):**
 ```bash
 git push              # Ask: "Should I push to GitHub?"
 npx vercel deploy     # Ask: "Ready to deploy to production?"
-npm publish           # Ask: "Should I publish this package?"
+pnpm publish           # Ask: "Should I publish this package?"
 ```
 
 **Rule:** Production commands affect live systems → always ask first.
@@ -128,9 +128,9 @@ npm publish           # Ask: "Should I publish this package?"
 ### Scenario 1: User Says "Make me a website"
 
 **You do:**
-1. Check if dependencies installed: `npm list` (run immediately)
-2. If not installed: `npm install` (run immediately)
-3. Start dev server: `npm run dev` (run immediately)
+1. Check if dependencies installed: `pnpm list` (run immediately)
+2. If not installed: `pnpm install` (run immediately)
+3. Start dev server: `pnpm run dev` (run immediately)
 4. Create files
 5. Tell user: "I've started the dev server. Go to http://localhost:3000"
 
@@ -143,9 +143,9 @@ npm publish           # Ask: "Should I publish this package?"
 2. If it needs a package (like react-hook-form):
    - Tell user: "I'll add form validation using react-hook-form. Should I proceed?"
    - Wait for confirmation
-   - Run: `npm install react-hook-form`
+   - Run: `pnpm install react-hook-form`
 3. Complete the feature
-4. Run dev server if not running: `npm run dev`
+4. Run dev server if not running: `pnpm run dev`
 
 **Ask permission** for new packages, but not for dev server.
 
@@ -154,13 +154,13 @@ npm publish           # Ask: "Should I publish this package?"
 **You do:**
 1. Run diagnostics immediately:
    ```bash
-   npm run build
-   npm run lint
+   pnpm run build
+   pnpm run lint
    git status
    ```
 2. Identify the issue
 3. Fix the code
-4. Verify fix: `npm run dev`
+4. Verify fix: `pnpm run dev`
 5. Tell user: "Fixed! Your app should work now."
 
 **No permission needed** - diagnostics and fixes are expected.
@@ -191,7 +191,7 @@ npx vercel deploy
 
 **You do:**
 ```bash
-npm install
+pnpm install
 ```
 
 Immediately. Then tell user: "Dependencies installed!"
@@ -202,7 +202,7 @@ Immediately. Then tell user: "Dependencies installed!"
 
 **You do:**
 1. Check if node_modules exists (using bash: `ls node_modules`)
-2. If missing: `npm install` immediately
+2. If missing: `pnpm install` immediately
 3. Then respond to their request
 
 **No permission needed** - project must be ready to work.
@@ -212,7 +212,7 @@ Immediately. Then tell user: "Dependencies installed!"
 ### Installing a Package
 
 ```bash
-npm install <package-name>
+pnpm install <package-name>
 ```
 
 **When:** User asks for it OR after you ask permission for a feature
@@ -221,13 +221,13 @@ npm install <package-name>
 User: "Add Tailwind"
 You: "I'll add Tailwind CSS for styling. One moment..."
 ```bash
-npm install tailwindcss postcss autoprefixer
+pnpm install tailwindcss postcss autoprefixer
 ```
 
 ### Running Dev Server
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 **When:**
@@ -241,7 +241,7 @@ npm run dev
 ### Installing Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 **When:**
@@ -255,7 +255,7 @@ npm install
 ### Running Tests
 
 ```bash
-npm test
+pnpm test
 ```
 
 **When:**
@@ -289,7 +289,7 @@ If a command fails:
 Example:
 
 ```bash
-npm install some-package
+pnpm install some-package
 # Error: package not found
 ```
 
@@ -300,7 +300,7 @@ Let me install the correct one..."
 ```
 
 ```bash
-npm install somepackage
+pnpm install somepackage
 # Success
 ```
 
@@ -308,8 +308,8 @@ npm install somepackage
 
 ## What User NEVER Does
 
-❌ User never runs `npm install`
-❌ User never runs `npm run dev`
+❌ User never runs `pnpm install`
+❌ User never runs `pnpm run dev`
 ❌ User never runs `git` commands
 ❌ User never runs setup scripts
 ❌ User never checks versions
@@ -317,7 +317,7 @@ npm install somepackage
 
 ## What YOU Always Do
 
-✅ YOU run all npm commands
+✅ YOU run all pnpm commands
 ✅ YOU run all git commands
 ✅ YOU run all setup scripts
 ✅ YOU check versions/status
@@ -359,13 +359,13 @@ Is it safe and expected? (like starting dev server)
 ### ❌ WRONG: Telling User to Run Commands
 
 "To install dependencies, run:
-npm install"
+pnpm install"
 
 ### ✅ RIGHT: Running Commands Yourself
 
 "I'll install the dependencies for you..."
 ```bash
-npm install
+pnpm install
 ```
 "Dependencies installed!"
 
@@ -381,7 +381,7 @@ You: [Create files but don't install needed packages]
 User: "Add a blog"
 You: "I'll add a blog. This needs the 'gray-matter' package. One moment..."
 ```bash
-npm install gray-matter
+pnpm install gray-matter
 ```
 [Create files]
 "Blog created!"
@@ -394,7 +394,7 @@ npm install gray-matter
 
 ### ✅ RIGHT: Running Diagnostic Commands
 
-[Just run: npm list or ls node_modules]
+[Just run: pnpm list or ls node_modules]
 "Checking dependencies..."
 
 ---

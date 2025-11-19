@@ -175,8 +175,8 @@ Pretty neat!"
 
 **YOU run diagnostic commands:**
 ```bash
-npm run build  # Check if it builds locally
-npm run lint   # Check for code issues
+pnpm run build  # Check if it builds locally
+pnpm run lint   # Check for code issues
 ```
 
 **Then explain:**
@@ -250,9 +250,9 @@ Only create if user has specific needs:
 ```json
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
+  "buildCommand": "pnpm run build",
+  "devCommand": "pnpm run dev",
+  "installCommand": "pnpm install",
   "framework": "nextjs",
   "outputDirectory": ".next"
 }

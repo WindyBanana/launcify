@@ -261,9 +261,9 @@ User controls testing approach from the start.
 Before marking as complete, verify:
 - [ ] GitHub Action runs successfully
 - [ ] All AI editor configs are valid
-- [ ] Next.js 16 app runs: `npm install && npm run dev`
-- [ ] Tests run: `npm test`
-- [ ] TypeScript compiles: `npm run build`
+- [ ] Next.js 16 app runs: `pnpm install && pnpm run dev`
+- [ ] Tests run: `pnpm test`
+- [ ] TypeScript compiles: `pnpm run build`
 - [ ] Template button works on GitHub
 
 ---

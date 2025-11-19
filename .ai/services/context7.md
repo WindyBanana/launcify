@@ -79,14 +79,14 @@ Got it copied? Perfect!"
 ```
 "Great! Now I'll run the setup script for you.
 
-I'm going to run: npm run setup-context7
+I'm going to run: pnpm run setup-context7
 
 It will ask for your API key - just paste it when prompted and press Enter."
 ```
 
 **AI: Actually run the command using the Bash tool:**
 ```bash
-npm run setup-context7
+pnpm run setup-context7
 ```
 
 The script will prompt for the API key. Tell the user to paste it when they see the prompt.
@@ -203,7 +203,7 @@ me know the correct, current way to use these tools."
 
 ## Manual Setup (If Script Fails)
 
-If `npm run setup-context7` doesn't work, guide users to manually edit config files:
+If `pnpm run setup-context7` doesn't work, guide users to manually edit config files:
 
 ### For Cursor Users:
 ```
@@ -248,7 +248,7 @@ Users create their API key at `https://context7.com/dashboard` after signup:
 2. Navigate to dashboard
 3. Create API key (looks like: `ctx7_abc123...`)
 4. Copy the key
-5. Run `npm run setup-context7` and paste when prompted
+5. Run `pnpm run setup-context7` and paste when prompted
 
 **Important:** The same API key works for both MCP and direct API access.
 
@@ -316,19 +316,19 @@ With Context7 active, you'll get the latest syntax."
 - Gives you current documentation
 - Prevents outdated code suggestions
 - User needs to sign up at context7.com
-- **YOU run `npm run setup-context7`** - user should NEVER run terminal commands
+- **YOU run `pnpm run setup-context7`** - user should NEVER run terminal commands
 - **MCP integration** (not direct API) is what we configure
 - Same API key works for both MCP and API access
 
 **Your role:**
 1. Suggest Context7 proactively (don't force it)
 2. Guide user to get API key from dashboard
-3. **YOU run `npm run setup-context7`** using Bash tool (NO PERMISSION NEEDED - user asked for it)
+3. **YOU run `pnpm run setup-context7`** using Bash tool (NO PERMISSION NEEDED - user asked for it)
 4. Tell user to restart their editor
 5. **YOU verify** it works using verification steps
 
 **When user says "Set up Context7":**
-- Immediately run `npm run setup-context7` using Bash tool
+- Immediately run `pnpm run setup-context7` using Bash tool
 - Guide them through pasting API key
 - Verify it worked
 - NO PERMISSION NEEDED - they explicitly requested it

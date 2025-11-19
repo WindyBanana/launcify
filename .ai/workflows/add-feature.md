@@ -12,7 +12,7 @@ Use this workflow when user asks to add a feature to the application.
 npm list
 
 # If any missing, install immediately
-npm install
+pnpm install
 ```
 
 **No permission needed** - just ensure project is ready.
@@ -109,7 +109,7 @@ Should I install it?"
 
 **After user confirms, YOU run:**
 ```bash
-npm install [package-name]
+pnpm install [package-name]
 ```
 
 **Then create files in this order:**
@@ -141,7 +141,7 @@ Check:
 **YOU run the dev server** - user should never run terminal commands.
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 **Then tell user AND verify:**
@@ -288,7 +288,7 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
 
 **YOU run:**
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 **Then tell user:**

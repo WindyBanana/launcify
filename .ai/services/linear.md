@@ -60,7 +60,7 @@ Sound good?"
 **After user confirms, YOU run:**
 
 ```bash
-npm install @linear/sdk
+pnpm install @linear/sdk
 ```
 
 **Tell user:**
@@ -439,7 +439,7 @@ Done? Great! Now let's test..."
 **YOU run:**
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 **Tell user:**
@@ -554,7 +554,7 @@ Set up views:
 **When user needs feedback system:**
 1. Explain Linear (suggestion box for app)
 2. Ask permission
-3. **YOU run `npm install @linear/sdk`**
+3. **YOU run `pnpm install @linear/sdk`**
 4. Guide user to get API key and team ID
 5. **YOU create Linear client and helpers**
 6. **YOU create API routes**

@@ -6,7 +6,7 @@ This checklist guides you (the AI) through verifying Context7 is properly config
 
 ## Pre-Setup Verification
 
-Before running `npm run setup-context7`, YOU verify:
+Before running `pnpm run setup-context7`, YOU verify:
 
 - [ ] User has a Context7 account at https://context7.com
 - [ ] User has created an API key in the dashboard
@@ -16,7 +16,7 @@ Before running `npm run setup-context7`, YOU verify:
 
 ## Post-Setup Verification
 
-After YOU run `npm run setup-context7`, YOU check:
+After YOU run `pnpm run setup-context7`, YOU check:
 
 ### 1. Config Files Updated
 
@@ -172,7 +172,7 @@ If user needs to update or change their API key, YOU:
 
 ```bash
 # YOU re-run the setup script
-npm run setup-context7
+pnpm run setup-context7
 ```
 
 **Do not** tell the user to run this themselves.
