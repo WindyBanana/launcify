@@ -20,7 +20,21 @@ ls package.json
 
 **If package.json DOES NOT exist:**
 
-### Step 2: Generate Fresh package.json
+### Step 2: Detect Latest pnpm Version
+
+Before generating package.json, get the current pnpm version:
+
+```bash
+pnpm --version
+```
+
+This returns the version (e.g., "9.0.0" or "10.5.2"). You'll use this in the packageManager field.
+
+**If pnpm command fails** (not installed yet), use a fallback:
+- Check npm registry: `npm view pnpm version`
+- Or use safe default: "9.0.0"
+
+### Step 3: Generate Fresh package.json
 
 Read these files:
 1. `.ai/project-dependencies.md` - Lists all required packages
@@ -30,6 +44,7 @@ Then create package.json with:
 - Project name based on folder name
 - **Latest stable versions** of all dependencies
 - All required scripts
+- **packageManager with detected version** (from Step 2)
 
 **Example package.json structure:**
 ```json
@@ -37,7 +52,7 @@ Then create package.json with:
   "name": "[folder-name]-app",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@[detected-version]",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -78,9 +93,11 @@ Then create package.json with:
 }
 ```
 
-**Important:** Use `"latest"` for all version numbers. pnpm will resolve to the latest stable version automatically.
+**Important:**
+- Use `"latest"` for all dependency version numbers (works fine for dependencies)
+- Use detected version for `packageManager` field (e.g., "pnpm@10.5.2")
 
-### Step 3: Install Dependencies
+### Step 4: Install Dependencies
 
 ```bash
 pnpm install

@@ -109,7 +109,7 @@ When generating package.json, use these values:
   "version": "0.1.0",
   "private": true,
   "description": "Built with AI assistance using the Launcify template",
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@[detected-version]",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -117,7 +117,30 @@ When generating package.json, use these values:
 }
 ```
 
-**Note about packageManager field:** Use a specific version (e.g., "pnpm@9.0.0") not "latest". The packageManager field requires a semver version and will fail with "latest".
+**How to determine [detected-version]:**
+
+The packageManager field requires a specific semver version (not "latest"). To always use the latest:
+
+1. **First, try to detect installed version:**
+   ```bash
+   pnpm --version
+   # Returns: 10.5.2 (or whatever is currently installed)
+   ```
+   Use this version → `"packageManager": "pnpm@10.5.2"`
+
+2. **If pnpm not installed, check npm registry:**
+   ```bash
+   npm view pnpm version
+   # Returns: 10.22.0 (or whatever is latest in registry)
+   ```
+   Use this version → `"packageManager": "pnpm@10.22.0"`
+
+3. **If both fail, use safe fallback:**
+   ```
+   "packageManager": "pnpm@9.0.0"
+   ```
+
+This ensures you always use the **latest available version**, not a hardcoded outdated one.
 
 **Note:** Replace `[folder-name]` with the actual project directory name.
 
