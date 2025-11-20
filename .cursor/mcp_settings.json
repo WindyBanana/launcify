@@ -3,7 +3,7 @@
     "context7-disabled": {
       "comment": "Context7 provides up-to-date documentation. To enable:",
       "comment2": "1. Sign up at https://context7.com/dashboard for free API key",
-      "comment3": "2. Run: pnpm run setup-context7",
+      "comment3": "2. Run: npm run setup-context7",
       "comment4": "3. Restart Cursor",
       "command": "npx",
       "args": [

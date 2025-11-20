@@ -3,7 +3,7 @@
 #
 # To enable:
 # 1. Sign up at https://context7.com/dashboard for free API key
-# 2. Run: pnpm run setup-context7
+# 2. Run: npm run setup-context7
 # 3. Restart Codex
 #
 # Uncomment and add your API key:
